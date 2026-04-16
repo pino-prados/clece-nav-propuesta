@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CLECE FS — Estructura de navegacion propuesta</title>
+<title>CLECE FS — Propuesta navegacion completa · Abril 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -11,664 +11,1257 @@
 :root{
   --navy:#0D2550;--blue:#1B3D8F;--blue2:#2A5298;
   --line:#D1D9E6;--surface:#F7F9FC;--surface2:#EEF2F8;
-  --text:#0F172A;--sub:#4A5568;--muted:#8896A8;--white:#ffffff;
+  --text:#0F172A;--sub:#4A5568;--muted:#718096;--white:#FFFFFF;
   --dc:#0C4A6E;--hc:#065F46;--ind:#6B3A00;--ene:#3B1F8C;--fac:#1A3480;--spo:#0A6880;
   --green:#16A34A;--amber:#D97706;--red:#DC2626;
 }
-html,body{height:100%;overflow:hidden}
-body{font-family:"IBM Plex Sans",sans-serif;color:var(--text);background:var(--white);display:flex;flex-direction:column}
+body{font-family:"IBM Plex Sans",sans-serif;color:var(--text);background:var(--white);line-height:1.6;font-size:15px}
+a{text-decoration:none;cursor:pointer}
 
-/* SLIDE CONTAINER */
-.deck{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.slides{display:flex;flex:1;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform}
-.slide{min-width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden}
+/* ── STICKY TOPBAR ── */
+.topbar{background:var(--navy);padding:6px 48px;display:flex;justify-content:space-between;align-items:center}
+.topbar-l{font-family:"IBM Plex Mono",monospace;font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.08em}
+.topbar-r{display:flex;gap:16px}
+.topbar-r a{font-size:11px;color:rgba(255,255,255,.45);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.topbar-r a:hover{color:#fff}
 
-/* PROGRESS BAR */
-.progress{height:3px;background:var(--line);flex-shrink:0}
-.progress-fill{height:100%;background:var(--navy);transition:width .4s}
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:1px solid var(--line);padding:0 48px;display:flex;align-items:stretch;position:sticky;top:0;z-index:200;box-shadow:0 1px 8px rgba(0,0,0,.05)}
+.nav-brand{display:flex;align-items:center;padding:14px 24px 14px 0;border-right:1px solid var(--line);margin-right:28px;cursor:pointer}
+.nav-brand-text{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:500;color:var(--navy)}
+.nav-brand-text em{font-style:normal;color:var(--blue2)}
+.nav-brand-sub{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
+.nav-links{display:flex;align-items:stretch;flex:1}
+.nl{display:flex;align-items:center;padding:0 13px;font-size:12.5px;font-weight:400;color:var(--sub);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;transition:color .12s;position:relative}
+.nl:hover{color:var(--navy)}
+.nl.on{color:var(--navy);font-weight:500;border-bottom-color:var(--navy)}
+.nl .caret{font-size:8px;margin-left:4px;opacity:.5}
+/* dropdown */
+.nl.has-drop:hover .drop{display:block}
+.drop{display:none;position:absolute;top:100%;left:0;background:var(--white);border:1px solid var(--line);border-top:2px solid var(--navy);min-width:200px;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.drop a{display:flex;align-items:center;gap:9px;padding:10px 16px;font-size:12px;color:var(--sub);border-bottom:1px solid var(--line);transition:background .1s}
+.drop a:last-child{border-bottom:none}
+.drop a:hover{background:var(--surface);color:var(--navy)}
+.drop-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;padding-left:16px;border-left:1px solid var(--line)}
+.nb{font-size:11.5px;font-weight:500;padding:7px 16px;border-radius:2px;cursor:pointer;font-family:"IBM Plex Sans",sans-serif;border:1px solid var(--line);color:var(--sub);background:var(--white);transition:all .12s}
+.nb:hover{border-color:var(--navy);color:var(--navy)}
+.nb.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.nb.pri:hover{background:var(--blue2)}
 
-/* NAV CONTROLS */
-.controls{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;border-bottom:1px solid var(--line);flex-shrink:0;background:var(--white)}
-.ctrl-brand{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:500;color:var(--navy);display:flex;align-items:center;gap:8px}
-.ctrl-brand em{font-style:normal;color:var(--blue2)}
-.ctrl-brand span{font-size:10px;color:var(--muted);font-weight:400;letter-spacing:.08em;text-transform:uppercase}
-.ctrl-dots{display:flex;gap:6px;align-items:center}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--line);cursor:pointer;transition:all .2s;border:1px solid var(--line)}
-.dot.on{background:var(--navy);border-color:var(--navy);width:22px;border-radius:4px}
-.ctrl-arrows{display:flex;gap:6px}
-.arr{padding:6px 14px;border:1px solid var(--line);background:var(--white);font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:500;color:var(--sub);cursor:pointer;border-radius:2px;transition:all .15s}
-.arr:hover{border-color:var(--navy);color:var(--navy)}
-.arr:disabled{opacity:.3;cursor:default}
-.slide-counter{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted)}
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
 
-/* SLIDE CONTENT */
-.slide-inner{flex:1;padding:32px 48px;overflow:auto;display:flex;flex-direction:column}
+/* ── HERO ── */
+.hero{background:var(--white);padding:72px 48px 64px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:start;max-width:1200px;margin:0 auto}
+.h-label{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--blue2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.h-label::before{content:"";display:inline-block;width:20px;height:1px;background:var(--blue2)}
+.hero h1{font-size:32px;font-weight:600;color:var(--navy);line-height:1.18;letter-spacing:-.5px;margin-bottom:20px}
+.hero-desc{font-size:13.5px;color:var(--sub);line-height:1.8;margin-bottom:28px;font-weight:300;max-width:520px}
+.hero-ctas{display:flex;gap:8px}
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.kpi{background:var(--white);padding:20px 22px}
+.kpi-v{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:500;color:var(--navy);line-height:1;letter-spacing:-1px}
+.kpi-l{font-size:11px;color:var(--muted);margin-top:5px}
+.kpi-sub{font-size:10px;color:var(--line);margin-top:3px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
 
-/* SLIDE LABELS */
-.s-eyebrow{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.s-eyebrow::before{content:"";display:inline-block;width:16px;height:1px;background:var(--muted)}
-.s-title{font-size:26px;font-weight:600;color:var(--navy);letter-spacing:-.4px;line-height:1.2;margin-bottom:8px}
-.s-sub{font-size:13px;color:var(--sub);max-width:700px;line-height:1.7;font-weight:300;margin-bottom:28px}
+/* ── SECTIONS ── */
+.sec{padding:56px 48px;border-bottom:1px solid var(--line)}
+.sec.bg{background:var(--surface)}
+.sec.navy{background:var(--navy)}
+.sec-inner{max-width:1200px;margin:0 auto}
+.s-lbl{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.s-lbl::before{content:"";display:inline-block;width:14px;height:1px;background:var(--muted)}
+.s-title{font-size:26px;font-weight:600;color:var(--navy);letter-spacing:-.3px;margin-bottom:7px;line-height:1.2}
+.s-sub{font-size:13px;color:var(--sub);max-width:680px;line-height:1.75;margin-bottom:32px;font-weight:300}
+.sec.navy .s-lbl,.sec.navy .s-lbl::before{color:rgba(255,255,255,.35);background:rgba(255,255,255,.2)}
+.sec.navy .s-title{color:#fff}
+.sec.navy .s-sub{color:rgba(255,255,255,.55)}
 
-/* GRID UTILS */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+/* ── SECTOR GRID ── */
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.cell{background:var(--white);padding:18px 20px}
-.cell.bg{background:var(--surface)}
-.cell-label{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
-.cell-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}
-.cell-sub{font-size:11px;color:var(--muted);margin-bottom:8px}
-.cell-desc{font-size:12px;color:var(--sub);line-height:1.6}
-.cell-list{list-style:none;display:flex;flex-direction:column;gap:3px;margin-top:6px}
-.cell-list li{font-size:11px;color:var(--muted);display:flex;gap:6px;line-height:1.5}
-.cell-list li::before{content:">";color:var(--blue2);flex-shrink:0;font-family:monospace;font-weight:600}
+.g6{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.sc{background:var(--white);padding:24px;cursor:pointer;transition:background .12s}
+.sc:hover{background:var(--surface)}
+.sc-code{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.08em;margin-bottom:8px}
+.sc-name{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:3px}
+.sc-sect{font-size:11px;color:var(--muted);margin-bottom:10px}
+.sc-desc{font-size:12px;color:var(--sub);line-height:1.6;margin-bottom:12px}
+.sc-items{display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
+.sci{font-size:11px;color:var(--muted);display:flex;gap:6px}
+.sci::before{content:"--";color:var(--line);flex-shrink:0;font-family:monospace}
+.sc-link{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.sc.dc{background:var(--dc)}
+.sc.dc:hover{background:#0a3d5e}
+.sc.dc .sc-code,.sc.dc .sc-sect,.sc.dc .sc-link{color:rgba(255,255,255,.55)}
+.sc.dc .sc-name,.sc.dc .sc-desc{color:#fff}
+.sc.dc .sci{color:rgba(255,255,255,.6)}
+.sc.dc .sci::before{color:rgba(255,255,255,.2)}
+.sc-badge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.08em;padding:2px 6px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.75);margin-bottom:8px}
 
-/* NAV MAP */
-.nav-map{display:flex;gap:0;border:1px solid var(--line);overflow:hidden;margin-bottom:20px}
-.nm-item{flex:1;padding:12px 14px;border-right:1px solid var(--line);cursor:pointer;transition:background .15s;position:relative}
-.nm-item:last-child{border-right:none}
-.nm-item.active{background:var(--navy)}
-.nm-item.active .nm-title{color:#fff}
-.nm-item.active .nm-sub{color:rgba(255,255,255,.5)}
-.nm-item:hover:not(.active){background:var(--surface)}
-.nm-title{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:2px;white-space:nowrap}
-.nm-sub{font-size:10px;color:var(--muted);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
-.nm-new{position:absolute;top:6px;right:6px;background:var(--green);color:#fff;font-size:8px;font-weight:600;padding:1px 5px;border-radius:2px;font-family:monospace;letter-spacing:.06em}
-.nm-mod{position:absolute;top:6px;right:6px;background:var(--amber);color:#fff;font-size:8px;font-weight:600;padding:1px 5px;border-radius:2px;font-family:monospace;letter-spacing:.06em}
+/* ── LIFECYCLE ── */
+.lcy{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.lc{background:var(--white);padding:24px}
+.lc-n{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.lc-n::after{content:"";flex:1;height:1px;background:var(--line)}
+.lc-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:5px}
+.lc-sub{font-size:11px;font-family:"IBM Plex Mono",monospace;color:var(--muted);margin-bottom:8px;letter-spacing:.04em}
+.lc-desc{font-size:12px;color:var(--sub);line-height:1.6;margin-bottom:12px}
+.lc-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.lc-list li{font-size:11px;color:var(--muted);display:flex;gap:7px;line-height:1.5}
+.lc-list li::before{content:">";color:var(--blue2);flex-shrink:0;font-weight:600;font-family:monospace}
+.lc-val{background:var(--surface);padding:10px 12px;margin-top:14px;border-top:1px solid var(--line)}
+.lc-val-lbl{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.lc-val-txt{font-size:11px;color:var(--sub);line-height:1.5}
+.lc.act{border-top:2px solid var(--navy)}
+.lc.act .lc-n{color:var(--navy)}
+.lc.lean{border-top:2px solid var(--blue2)}
+.lc.lean .lc-n{color:var(--blue2)}
 
-/* PERSONAS SPLIT */
-.split{display:grid;grid-template-columns:1fr 3px 1fr 3px 1fr;gap:0;height:100%}
-.split-div{background:var(--line)}
-.split-col{padding:0 28px;display:flex;flex-direction:column}
-.split-col-label{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:12px 0;border-bottom:2px solid;margin-bottom:16px}
-.split-col-label.mod{color:var(--amber);border-color:var(--amber)}
-.split-col-label.new{color:var(--red);border-color:var(--red)}
-.split-col-label.keep{color:var(--green);border-color:var(--green)}
-.sp-item{margin-bottom:14px}
-.sp-item-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px}
-.sp-item-dest{font-family:"IBM Plex Mono",monospace;font-size:10px;margin-bottom:4px;display:flex;align-items:center;gap:5px}
-.sp-item-desc{font-size:11px;color:var(--muted);line-height:1.55}
-.arrow-badge{font-size:9px;font-weight:600;padding:2px 7px;border-radius:2px;letter-spacing:.05em}
+/* ── PORTFOLIO ── */
+.pt{background:var(--white);padding:22px}
+.pt-top{height:4px;margin:-22px -22px 16px;background:var(--line)}
+.pt-title{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.pt-sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);margin-bottom:10px;letter-spacing:.04em}
+.pt-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.pt-list li{font-size:12px;color:var(--sub);display:flex;gap:7px;line-height:1.5}
+.pt-list li::before{content:">";color:var(--blue2);flex-shrink:0;font-family:monospace;font-weight:600}
 
-/* SECTOR CARDS */
-.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.sc{border:1px solid var(--line);padding:16px;position:relative}
-.sc.dc{background:var(--dc);border-color:var(--dc)}
-.sc-code{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.sc-name{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:3px}
-.sc-sub{font-size:10px;color:var(--muted);margin-bottom:8px}
-.sc-items{list-style:none;display:flex;flex-direction:column;gap:2px}
-.sc-items li{font-size:10px;color:var(--muted);display:flex;gap:5px}
-.sc-items li::before{content:"--";color:var(--line);flex-shrink:0;font-family:monospace}
-.sc.dc .sc-code{color:rgba(255,255,255,.45)}
-.sc.dc .sc-name{color:#fff}
-.sc.dc .sc-sub{color:rgba(255,255,255,.5)}
-.sc.dc .sc-items li{color:rgba(255,255,255,.6)}
-.sc.dc .sc-items li::before{color:rgba(255,255,255,.2)}
-.sc-badge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:8px;font-weight:500;letter-spacing:.08em;padding:1px 6px;background:rgba(255,255,255,.2);color:rgba(255,255,255,.8);margin-bottom:7px}
+/* ── NUMBERS ── */
+.nm{background:var(--white);padding:24px}
+.nm-v{font-family:"IBM Plex Mono",monospace;font-size:30px;font-weight:500;color:var(--navy);line-height:1;letter-spacing:-1px}
+.nm-l{font-size:11px;color:var(--muted);margin-top:6px}
 
-/* LEGEND */
-.legend{display:flex;gap:16px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line);flex-shrink:0}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
-.leg-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
+/* ── REFS ── */
+.gr{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.rf{background:var(--white);padding:18px}
+.rf-sec{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rf-name{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.rf-desc{font-size:11px;color:var(--muted);line-height:1.5}
 
-/* OVERVIEW TABLE */
-.ov-table{width:100%;border-collapse:collapse;border:1px solid var(--line);font-size:12px}
-.ov-table th{background:var(--navy);color:#fff;font-weight:500;padding:8px 12px;text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
-.ov-table td{padding:8px 12px;border-bottom:1px solid var(--line);color:var(--sub);vertical-align:top}
-.ov-table tr:last-child td{border-bottom:none}
-.ov-table tr:nth-child(even) td{background:var(--surface)}
-.ov-table .nav-cell{font-weight:600;color:var(--navy)}
-.badge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;padding:2px 6px;border-radius:2px;letter-spacing:.05em}
+/* ── CERTS ── */
+.certs{display:flex;flex-wrap:wrap;gap:6px}
+.cert{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;padding:5px 10px;border:1px solid var(--line);color:var(--sub);letter-spacing:.03em;transition:border-color .12s}
+.cert:hover{border-color:var(--navy);color:var(--navy)}
+
+/* ── SECTOR PAGE ── */
+.sector-hero{padding:48px 48px 40px;border-bottom:1px solid var(--line)}
+.sector-hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start}
+.s-breadcrumb{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);margin-bottom:14px;letter-spacing:.06em;display:flex;align-items:center;gap:6px}
+.s-breadcrumb span{cursor:pointer;color:var(--blue2)}
+.s-breadcrumb span:hover{text-decoration:underline}
+.sector-code{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;letter-spacing:.1em;margin-bottom:10px}
+.sector-name{font-size:34px;font-weight:600;color:var(--navy);letter-spacing:-.5px;margin-bottom:6px;line-height:1.1}
+.sector-sub{font-size:13px;color:var(--muted);margin-bottom:16px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.sector-desc{font-size:14px;color:var(--sub);line-height:1.75;font-weight:300;max-width:580px}
+.sector-certs-mini{display:flex;flex-wrap:wrap;gap:5px;margin-top:18px}
+.sector-nav{display:flex;gap:0;border:1px solid var(--line);overflow:hidden;margin-top:28px}
+.sn-item{flex:1;padding:11px 14px;border-right:1px solid var(--line);cursor:pointer;transition:background .12s;text-align:center}
+.sn-item:last-child{border-right:none}
+.sn-item:hover{background:var(--surface)}
+.sn-item.on{background:var(--navy)}
+.sn-item.on .sn-label{color:#fff}
+.sn-label{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--sub);letter-spacing:.06em}
+
+/* ── QUIENES SOMOS ── */
+.qs-hero{padding:64px 48px;border-bottom:1px solid var(--line);background:var(--navy)}
+.qs-inner{max-width:1200px;margin:0 auto}
+.qs-split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;max-width:1200px;margin:0 auto}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:20px;padding:16px 0;border-bottom:1px solid var(--line)}
+.tl-year{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;color:var(--blue2);min-width:44px;padding-top:2px}
+.tl-text{font-size:12.5px;color:var(--sub);line-height:1.6}
+.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.val-item{background:var(--white);padding:18px 20px}
+.val-title{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.val-desc{font-size:11.5px;color:var(--sub);line-height:1.55}
+.deleg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.deleg{background:var(--white);padding:18px}
+.deleg-name{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:3px}
+.deleg-loc{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--blue2);margin-bottom:5px}
+.deleg-provincias{font-size:11px;color:var(--muted);line-height:1.5}
+.prl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.prl{background:var(--white);padding:18px}
+.prl-num{font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:500;color:var(--navy);margin-bottom:6px}
+.prl-text{font-size:11.5px;color:var(--sub);line-height:1.55}
+
+/* ── SOSTENIBILIDAD ── */
+.sost-tabs{display:flex;border-bottom:1px solid var(--line);padding:0 48px;background:var(--white);position:sticky;top:57px;z-index:100}
+.st{padding:14px 20px;font-size:13px;color:var(--sub);cursor:pointer;border-bottom:2px solid transparent;font-weight:400;transition:color .12s}
+.st:hover{color:var(--navy)}
+.st.on{color:var(--navy);font-weight:500;border-bottom-color:var(--navy)}
+.sost-page{display:none}
+.sost-page.active{display:block}
+
+/* ── CONTACTO ── */
+.contact-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:start}
+.form-row{margin-bottom:18px}
+.form-label{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
+.form-input{width:100%;border:1px solid var(--line);padding:11px 14px;font-size:13px;font-family:"IBM Plex Sans",sans-serif;color:var(--text);background:var(--white);outline:none;transition:border-color .12s;border-radius:2px}
+.form-input:focus{border-color:var(--navy)}
+.form-select{width:100%;border:1px solid var(--line);padding:11px 14px;font-size:13px;font-family:"IBM Plex Sans",sans-serif;color:var(--text);background:var(--white);outline:none;border-radius:2px;cursor:pointer}
+.form-textarea{width:100%;border:1px solid var(--line);padding:11px 14px;font-size:13px;font-family:"IBM Plex Sans",sans-serif;color:var(--text);background:var(--white);outline:none;resize:vertical;min-height:120px;border-radius:2px}
+.contact-offices{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line)}
+.office{background:var(--white);padding:16px}
+.office-name{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:3px}
+.office-addr{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* ── REFERENCIAS PAGE ── */
+.ref-filter{display:flex;gap:6px;margin-bottom:28px;flex-wrap:wrap}
+.rf-btn{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;padding:6px 14px;border:1px solid var(--line);cursor:pointer;background:var(--white);color:var(--sub);letter-spacing:.05em;transition:all .15s;border-radius:2px}
+.rf-btn:hover{border-color:var(--navy);color:var(--navy)}
+.rf-btn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ref-card{background:var(--white);border:1px solid var(--line);padding:20px;margin-bottom:1px}
+.ref-card-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:8px}
+.ref-client{font-size:15px;font-weight:600;color:var(--navy)}
+.ref-sector-badge{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;padding:3px 8px;letter-spacing:.08em}
+.ref-location{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);margin-bottom:6px}
+.ref-service{font-size:12px;color:var(--sub);line-height:1.6}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);padding:44px 48px 28px;border-top:3px solid var(--blue2)}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
+.ft-brand{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:500;color:#fff;margin-bottom:8px}
+.ft-desc{font-size:12px;color:rgba(255,255,255,.38);line-height:1.65;font-weight:300;max-width:260px}
+.ft-addr{margin-top:14px;font-size:10px;color:rgba(255,255,255,.22);font-family:"IBM Plex Mono",monospace;line-height:1.7}
+footer h4{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.28);margin-bottom:10px}
+footer a{display:block;font-size:12px;color:rgba(255,255,255,.45);margin-bottom:5px;font-weight:300;cursor:pointer;transition:color .12s}
+footer a:hover{color:#fff}
+.ft-bot{max-width:1200px;margin:28px auto 0;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;font-size:10px;color:rgba(255,255,255,.2);display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace}
+
+/* ── NOTA PROPUESTA ── */
+.nota{background:#FFF8E6;border-top:3px solid var(--amber);padding:11px 48px;font-size:11.5px;color:#78350F;display:flex;gap:10px;align-items:center;position:sticky;top:57px;z-index:150}
+.nota strong{font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#B45309;white-space:nowrap}
+
+/* ── INLINE BADGE ── */
+.badge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;padding:2px 7px;border-radius:2px;letter-spacing:.05em}
 .badge.new{background:#D1FAE5;color:#065F46}
 .badge.mod{background:#FEF3C7;color:#92400E}
-.badge.keep{background:#EFF6FF;color:#1E3A8A}
-.badge.del{background:#FEE2E2;color:#991B1B}
 
-/* LIVETEXT */
-.live-tag{display:inline-flex;align-items:center;gap:4px;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
-.live-dot{width:6px;height:6px;border-radius:50%;background:#16A34A;animation:pulse 1.8s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* ── PILL ── */
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;padding:3px 8px;border:1px solid var(--line);color:var(--sub);letter-spacing:.04em;margin-right:4px;margin-bottom:4px}
+
+/* ─── responsive ─── */
+@media(max-width:960px){
+  nav,.sec,.hero{padding-left:20px;padding-right:20px}
+  .hero{grid-template-columns:1fr}
+  .g3,.g6,.lcy,.gr,.deleg-grid,.prl-grid{grid-template-columns:1fr 1fr}
+  .g4{grid-template-columns:1fr 1fr}
+  .footer-inner{grid-template-columns:1fr 1fr}
+  .contact-grid,.qs-split{grid-template-columns:1fr}
+  .sost-tabs{padding:0 20px}
+  .sector-hero,.topbar{padding-left:20px;padding-right:20px}
+}
 </style>
 </head>
 <body>
 
-<div class="deck">
-  <div class="progress"><div class="progress-fill" id="prog" style="width:14.28%"></div></div>
+<!-- TOP BAR -->
+<div class="topbar">
+  <span class="topbar-l">CLECE FACILITY SERVICES S.A. · GRUPO CLECE · GRUPO ACS</span>
+  <div class="topbar-r">
+    <a onclick="nav('contacto')">info@clecefs.com</a>
+    <a>917 459 662</a>
+    <a href="https://www.canaldeempleo.es/CLECE" target="_blank">Canal de empleo</a>
+  </div>
+</div>
 
-  <div class="controls">
-    <div class="ctrl-brand">CLECE<em> FS</em> <span>Propuesta de navegacion web</span></div>
-    <div class="ctrl-dots" id="dots"></div>
-    <div style="display:flex;align-items:center;gap:16px">
-      <span class="slide-counter" id="counter">1 / 7</span>
-      <div class="ctrl-arrows">
-        <button class="arr" id="prev" onclick="go(-1)" disabled>&#8592; Anterior</button>
-        <button class="arr" id="next" onclick="go(1)">Siguiente &#8594;</button>
+<!-- NOTA PROPUESTA -->
+<div class="nota" id="nota-bar">
+  <strong>Propuesta web</strong>
+  <span>Prototipo de navegacion completa · Abril 2026 · Documento de trabajo interno.</span>
+  <span style="margin-left:auto;font-family:monospace;font-size:10px;cursor:pointer;opacity:.5" onclick="document.getElementById('nota-bar').style.display='none'">✕ cerrar</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="nav('home')">
+    <div>
+      <div class="nav-brand-text">CLECE<em> FS</em></div>
+      <div class="nav-brand-sub">Operación y Mantenimiento</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a class="nl" id="nav-quienes" onclick="nav('quienes')">Quiénes somos</a>
+    <a class="nl has-drop" id="nav-sectores" onclick="nav('sectores')">Sectores <span class="caret">▾</span>
+      <div class="drop">
+        <a onclick="navSector('dc');event.stopPropagation()"><span class="drop-dot" style="background:var(--dc)"></span>CFS Data Centers</a>
+        <a onclick="navSector('hc');event.stopPropagation()"><span class="drop-dot" style="background:var(--hc)"></span>Healthcare</a>
+        <a onclick="navSector('ind');event.stopPropagation()"><span class="drop-dot" style="background:var(--ind)"></span>Sector Industrial</a>
+        <a onclick="navSector('ene');event.stopPropagation()"><span class="drop-dot" style="background:var(--ene)"></span>Energía</a>
+        <a onclick="navSector('fac');event.stopPropagation()"><span class="drop-dot" style="background:var(--fac)"></span>Facilities</a>
+        <a onclick="navSector('spo');event.stopPropagation()"><span class="drop-dot" style="background:var(--spo)"></span>Sport &amp; Leisure</a>
+      </div>
+    </a>
+    <a class="nl" id="nav-servicios" onclick="nav('servicios')">Servicios</a>
+    <a class="nl" id="nav-soporte" onclick="nav('soporte')">Soporte end-to-end</a>
+    <a class="nl" id="nav-referencias" onclick="nav('referencias')">Referencias</a>
+    <a class="nl has-drop" id="nav-sost" onclick="nav('sost')">Sostenibilidad <span class="caret">▾</span>
+      <div class="drop">
+        <a onclick="navSost('ambiental');event.stopPropagation()"><span class="drop-dot" style="background:var(--hc)"></span>Ambiental</a>
+        <a onclick="navSost('social');event.stopPropagation()"><span class="drop-dot" style="background:var(--amber)"></span>Social</a>
+        <a onclick="navSost('gobierno');event.stopPropagation()"><span class="drop-dot" style="background:var(--navy)"></span>Buen gobierno</a>
+      </div>
+    </a>
+    <a class="nl" id="nav-contacto" onclick="nav('contacto')">Contacto</a>
+  </div>
+  <div class="nav-right">
+    <button class="nb" onclick="window.open('https://www.canaldeempleo.es/CLECE','_blank')">Canal de empleo</button>
+    <button class="nb pri" onclick="nav('contacto')">Contactar</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: HOME -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="hero">
+      <div>
+        <div class="h-label">Grupo Clece · Grupo ACS</div>
+        <h1>Servicios de operación y mantenimiento para infraestructuras de alta exigencia técnica</h1>
+        <p class="hero-desc">Especialistas en infraestructuras críticas — Data Centers, Healthcare, Sector Industrial y Energía — y en la gestión integral de sedes corporativas e instalaciones deportivas.<br><br>Cobertura técnica completa en España y Portugal. Grupo Clece — Grupo ACS.</p>
+        <div class="hero-ctas">
+          <button class="nb pri" onclick="nav('sectores')">Ver sectores</button>
+          <button class="nb" onclick="nav('servicios')">Portfolio técnico</button>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-v">657.166</div><div class="kpi-l">Órdenes de trabajo ejecutadas 2025</div><div class="kpi-sub">525.984 prev · 49.021 pred · 71.263 corr</div></div>
+        <div class="kpi"><div class="kpi-v">+2.500</div><div class="kpi-l">Profesionales</div><div class="kpi-sub">Equipo de ingeniería propio · Técnicos en plantilla directa</div></div>
+        <div class="kpi"><div class="kpi-v">+500</div><div class="kpi-l">Clientes activos</div></div>
+        <div class="kpi"><div class="kpi-v">+30</div><div class="kpi-l">Años en mantenimiento</div></div>
       </div>
     </div>
   </div>
 
-  <div class="slides" id="slides">
-
-    <!-- SLIDE 1: OVERVIEW -->
-    <div class="slide">
-      <div class="slide-inner">
-        <div class="s-eyebrow">Propuesta de estructura</div>
-        <div class="s-title">Mapa de navegacion — clecefs.com</div>
-        <p class="s-sub">Comparativa entre la navegacion actual y la propuesta. Cada pestana de la propuesta se desarrolla en las diapositivas siguientes.</p>
-
-        <table class="ov-table">
-          <thead>
-            <tr>
-              <th>Pagina propuesta</th>
-              <th>Estado</th>
-              <th>Contenido principal</th>
-              <th>Origen del contenido</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="nav-cell">Quienes somos</td><td><span class="badge mod">Reorganizado</span></td><td>Historia, modelo de gestion, equipo, delegaciones, habilitaciones, valor de las personas, PRL</td><td>Web actual: Conocenos + Personas</td></tr>
-            <tr><td class="nav-cell">Sectores &#9660;</td><td><span class="badge new">Nuevo</span></td><td>6 sub-paginas por sector con servicios, normativa, certs y referencias especificas</td><td>Web actual: Sectores (solo lista) + nuevo contenido</td></tr>
-            <tr><td class="nav-cell">Servicios</td><td><span class="badge mod">Reorganizado</span></td><td>Portfolio tecnico completo: energia, HVAC, PCI, telecom, instalaciones, ingenieria</td><td>Web actual: Mantenimiento + Efic. energetica + FS</td></tr>
-            <tr><td class="nav-cell">Soporte tecnico end-to-end</td><td><span class="badge new">Nuevo</span></td><td>Diseno + Implementacion + O&M + Mejora continua. Argumento diferenciador de MA.</td><td>Slide 6 y 8 de la presentacion MA</td></tr>
-            <tr><td class="nav-cell">Referencias</td><td><span class="badge mod">Reorganizado</span></td><td>Todas las referencias filtradas y descritas por sector</td><td>Web actual: referencias en lista plana</td></tr>
-            <tr><td class="nav-cell">Sostenibilidad &#9660;</td><td><span class="badge keep">Se mantiene</span></td><td>Ambiental + Social (incluye PRL y Personas) + Buen gobierno</td><td>Web actual: Sostenibilidad (ya correcta)</td></tr>
-            <tr><td class="nav-cell">Contacto</td><td><span class="badge keep">Se mantiene</span></td><td>Formulario con campo de sector + datos de 6 delegaciones</td><td>Web actual: Contacto + mejora de formulario</td></tr>
-            <tr><td class="nav-cell" style="color:var(--red);text-decoration:line-through">Personas</td><td><span class="badge del">Eliminado</span></td><td>Contenido redistribuido en Quienes somos y Sostenibilidad</td><td>Web actual: Personas</td></tr>
-            <tr><td class="nav-cell" style="color:var(--red);text-decoration:line-through">Innovacion</td><td><span class="badge del">Eliminado</span></td><td>Contenido integrado en Soporte tecnico end-to-end y Quienes somos</td><td>Web actual: Innovacion</td></tr>
-          </tbody>
-        </table>
-
-        <div class="legend">
-          <span class="leg-item"><span class="leg-dot" style="background:#065F46"></span>Nuevo</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#92400E"></span>Reorganizado</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#1E3A8A"></span>Se mantiene</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#991B1B"></span>Eliminado (contenido redistribuido)</span>
+  <div class="sec">
+    <div class="sec-inner">
+      <div class="s-lbl">Clasificación sectorial</div>
+      <div class="s-title">Servicios especializados por sector</div>
+      <p class="s-sub">CLECE FS organiza su actividad en función de las exigencias técnicas, normativas y operativas de cada sector. Cada clasificación agrupa el portfolio de servicios, habilitaciones y referencias relevantes para ese tipo de infraestructura.</p>
+      <div class="g3">
+        <div class="sc dc" onclick="navSector('dc')">
+          <div class="sc-badge">Marca propia registrada</div>
+          <div class="sc-code">01 / Data Centers</div>
+          <div class="sc-name">CFS Data Centers</div>
+          <div class="sc-sect">Infraestructura IT crítica</div>
+          <div class="sc-desc">O&amp;M para centros de datos. Disponibilidad 24/365. Mantenimiento preventivo, predictivo y correctivo de sistemas críticos de energía, refrigeración y conectividad.</div>
+          <div class="sc-items"><div class="sci">Data Hall · UPS · Grupos electrógenos · STS</div><div class="sci">Refrigeración CRAH/CRAC · HVAC</div><div class="sci">Monitorización DCIM · BMS</div><div class="sci">PCI · Seguridad · Logística interna</div></div>
+          <div class="sc-link">Ver sector Data Centers →</div>
+        </div>
+        <div class="sc" onclick="navSector('hc')">
+          <div class="sc-code" style="color:var(--hc)">02 / Healthcare</div>
+          <div class="sc-name">Sector sociosanitario</div>
+          <div class="sc-sect">Hospitales · Centros médicos · Residencias</div>
+          <div class="sc-desc">Mantenimiento con normativa específica: gases medicinales, salas blancas, sistemas de emergencia. Prevención de legionelosis. Experiencia en centros con acreditación JCI.</div>
+          <div class="sc-items"><div class="sci">Instalaciones de gases medicinales</div><div class="sci">Salas blancas y quirófanos</div><div class="sci">Sistemás de emergencia hospitalaria</div><div class="sci">Tratamiento de agua y legionela</div></div>
+          <div class="sc-link" style="color:var(--hc)">Ver sector Healthcare →</div>
+        </div>
+        <div class="sc" onclick="navSector('ind')">
+          <div class="sc-code" style="color:var(--ind)">03 / Industry</div>
+          <div class="sc-name">Sector industrial</div>
+          <div class="sc-sect">Automoción · Farma · Manufacturera · Agro</div>
+          <div class="sc-desc">Mantenimiento orientado a la maximización de la disponibilidad de planta. Mantenimiento basado en la condición (CBM). Gestión de OEMs. Certificación Lean Six Sigma en gestores.</div>
+          <div class="sc-items"><div class="sci">Mantenimiento basado en condición (CBM)</div><div class="sci">Instalaciones térmicas e hidráulicas</div><div class="sci">Alta y baja tensión · Salas eléctricas</div><div class="sci">Gestión de proveedores OEM</div></div>
+          <div class="sc-link" style="color:var(--ind)">Ver sector Industry →</div>
+        </div>
+        <div class="sc" onclick="navSector('ene')">
+          <div class="sc-code" style="color:var(--ene)">04 / Energy</div>
+          <div class="sc-name">Servicios energéticos</div>
+          <div class="sc-sect">Transversal a todos los sectores</div>
+          <div class="sc-desc">Empresa de Servicios Energéticos (ESE) acreditada. Gestión de Certificados de Ahorro Energético (CAEs). Auditoría, explotación e inversión energética. UNE 216701 en tres modalidades.</div>
+          <div class="sc-items"><div class="sci">Auditorías y consultoría energética</div><div class="sci">Solar fotovoltaica y cogeneración</div><div class="sci">Alumbrado público · Recarga VE</div><div class="sci">ISO 50001 · Gestión de CAEs</div></div>
+          <div class="sc-link" style="color:var(--ene)">Ver servicios energéticos →</div>
+        </div>
+        <div class="sc" onclick="navSector('fac')">
+          <div class="sc-code" style="color:var(--fac)">05 / Facilities</div>
+          <div class="sc-name">Sector terciario</div>
+          <div class="sc-sect">Sedes corporativas · Comercial · Oficinas</div>
+          <div class="sc-desc">Facility Management integral (ISO 41011). Integración de personas, espacios y procesos. Cuadros de mando con SLAs y KPIs. GMAO y gestión del dato.</div>
+          <div class="sc-items"><div class="sci">Mantenimiento integral de instalaciones</div><div class="sci">Gestión del ciclo de vida de activos</div><div class="sci">Business Intelligence · GMAO</div><div class="sci">SLAs · KPIs · Reporting</div></div>
+          <div class="sc-link" style="color:var(--fac)">Ver sector Facilities →</div>
+        </div>
+        <div class="sc" onclick="navSector('spo')">
+          <div class="sc-code" style="color:var(--spo)">06 / Sport &amp; Leisure</div>
+          <div class="sc-name">Instalaciones deportivas</div>
+          <div class="sc-sect">Polideportivos · Piscinas · Ocio</div>
+          <div class="sc-desc">Gestión integral de instalaciones deportivas públicas y privadas. Programación técnico-deportiva, mantenimiento de instalaciones acuáticas, eficiencia energética y gestión de accesos.</div>
+          <div class="sc-items"><div class="sci">Mantenimiento instalaciones acuáticas</div><div class="sci">Eficiencia energética en centros deportivos</div><div class="sci">Gestión de accesos y recepción</div><div class="sci">Programación técnico-deportiva</div></div>
+          <div class="sc-link" style="color:var(--spo)">Ver sector Sport &amp; Leisure →</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- SLIDE 2: QUIENES SOMOS -->
-    <div class="slide">
-      <div class="slide-inner">
-        <div class="nav-map">
-          <div class="nm-item active"><div class="nm-title">Quienes somos</div><div class="nm-sub">reorganizado</div><span class="nm-mod">MOD</span></div>
-          <div class="nm-item"><div class="nm-title">Sectores</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item"><div class="nm-title">Servicios</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Soporte end-to-end</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item"><div class="nm-title">Referencias</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Sostenibilidad</div><div class="nm-sub">se mantiene</div></div>
-          <div class="nm-item"><div class="nm-title">Contacto</div><div class="nm-sub">se mantiene</div></div>
-        </div>
-        <div class="s-eyebrow">Pagina 1 de 7</div>
-        <div class="s-title">Quienes somos</div>
-        <p class="s-sub">Fusion de la actual "Conocenos" con los bloques tecnicos de "Personas". Unica pagina que presenta la empresa al visitante.</p>
-        <div class="g3" style="flex:1">
-          <div class="cell">
-            <div class="cell-label" style="color:var(--navy)">Empresa</div>
-            <div class="cell-title">Historia y posicionamiento</div>
-            <ul class="cell-list">
-              <li>Mas de 30 anos en servicios de mantenimiento</li>
-              <li>Integracion en Grupo Clece (ACS)</li>
-              <li>Mision, vision y valores (Slide 3 MA)</li>
-              <li>Modelo de gestion: organizacion eficiente, profesionalizada y orientada al cliente</li>
-              <li>Registro Industrial nacional n.205979</li>
-            </ul>
-          </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--navy)">Equipo y cobertura</div>
-            <div class="cell-title">Capacidad operativa</div>
-            <ul class="cell-list">
-              <li>120 ingenieros + 2.330 tecnicos</li>
-              <li>6 delegaciones regionales + Portugal</li>
-              <li>Mapa de cobertura geografica</li>
-              <li>Formacion continua y carrera profesional</li>
-              <li>Certificacion Lean Six Sigma en gestores</li>
-            </ul>
-          </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--amber)">Procede de: Personas (actual)</div>
-            <div class="cell-title">El valor de las personas</div>
-            <ul class="cell-list">
-              <li>Cultura y valores: honestidad, transparencia, integridad</li>
-              <li>Capacidad tecnica: ingenieria de mantenimiento</li>
-              <li>Prevencion de riesgos laborales — 6 principios</li>
-              <li>Politica de SST (PDF descargable)</li>
-              <li>Cumplimiento normativo — Sistema Compliance</li>
-            </ul>
-          </div>
-        </div>
+  <div class="sec bg">
+    <div class="sec-inner">
+      <div class="s-lbl">Ciclo de vida de las infraestructuras</div>
+      <div class="s-title">Soporte técnico end-to-end</div>
+      <p class="s-sub">CLECE FS presta servicios técnicos especializados en todas las etapas del ciclo de vida de las infraestructuras, garantizando fiabilidad, eficiencia y cumplimiento normativo. <span style="font-family:monospace;font-size:11px;color:var(--blue2);cursor:pointer" onclick="nav('soporte')">Ver seccion completa →</span></p>
+      <div class="lcy">
+        <div class="lc"><div class="lc-n">01 · Diseño</div><div class="lc-title">Asesoría en fase de diseño</div><div class="lc-sub">Orientación técnica previa</div><div class="lc-desc">Definición de requisitos para la mantenibilidad y fiabilidad a largo plazo. Orientación técnica previa a la construcción o reforma.</div><ul class="lc-list"><li>Complementar criterios de diseño con orientación a la eficiencia operativa</li><li>Definir requisitos técnicos para mantenibilidad y fiabilidad</li><li>Asesoramiento sobre estándares y buenas prácticas</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Optimización de operaciones futuras. Reducción del riesgo de rediseños costosos.</div></div></div>
+        <div class="lc"><div class="lc-n">02 · Implementación</div><div class="lc-title">Supervisión e instalación</div><div class="lc-sub">Commissioning y arranque</div><div class="lc-desc">Participación en el proceso de instalación verificando el cumplimiento de las específicaciones técnicas y asistencia en commissioning.</div><ul class="lc-list"><li>Supervisión verificando cumplimiento de específicaciones</li><li>Orientación técnica durante fases críticas</li><li>Asistencia en procesos de commissioning</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Garantía de calidad y disponibilidad operativa desde el primer día.</div></div></div>
+        <div class="lc act"><div class="lc-n">03 · Operación y Mantenimiento</div><div class="lc-title">O&amp;M 24/365</div><div class="lc-sub">Core del negocio CFS</div><div class="lc-desc">Monitorización continua, mantenimiento preventivo, predictivo y correctivo. Resolución proactiva de incidencias.</div><ul class="lc-list"><li>Monitorización continua y analisis de indicadores</li><li>Mantenimiento preventivo, técnico-legal y predictivo</li><li>Analisis predictivo · Gestión de repuestos y logistica</li><li>Auditorías de cumplimiento y reporting</li><li>Cuadro de mando integral con KPIs e indicadores para el cliente</li><li>Plataforma de gestión energética: alarmas, analítica y control de facturación</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Maximizar disponibilidad y fiabilidad. Reducción de paradas no planificadas. Información consolidada y en tiempo real para la toma de decisiones.</div></div></div>
+        <div class="lc lean"><div class="lc-n">Transversal · Mejora continua</div><div class="lc-title">Metodología Lean</div><div class="lc-sub">En las tres fases</div><div class="lc-desc">Visión completa de la cadena de valor. Identificación de mudas. Estandarización de actividades. Mejora orientada al cliente.</div><ul class="lc-list"><li>Visión completa de la cadena de valor</li><li>Identificación de mudas y oportunidades de mejora</li><li>Estandarización de actividades y procesos</li><li>Mejora continua orientada al cliente</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Optimización permanente de la operación a lo largo del tiempo.</div></div></div>
       </div>
     </div>
+  </div>
 
-    <!-- SLIDE 3: SECTORES -->
-    <div class="slide">
-      <div class="slide-inner">
-        <div class="nav-map">
-          <div class="nm-item"><div class="nm-title">Quienes somos</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item active"><div class="nm-title">Sectores</div><div class="nm-sub">nuevo</div><span class="nm-new">NEW</span></div>
-          <div class="nm-item"><div class="nm-title">Servicios</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Soporte end-to-end</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item"><div class="nm-title">Referencias</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Sostenibilidad</div><div class="nm-sub">se mantiene</div></div>
-          <div class="nm-item"><div class="nm-title">Contacto</div><div class="nm-sub">se mantiene</div></div>
+  <!-- STRIP TECNOLOGIA -->
+  <div style="background:var(--navy);padding:40px 48px;border-bottom:1px solid rgba(255,255,255,.07)">
+    <div class="sec-inner">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;margin-bottom:28px">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px;display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:14px;height:1px;background:rgba(255,255,255,.2)"></span>Tecnología aplicada al O&amp;M</div>
+          <div style="font-size:22px;font-weight:600;color:#fff;letter-spacing:-.3px;margin-bottom:6px">Herramientas propias para la gestión de infraestructuras</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.45);font-weight:300;max-width:560px;line-height:1.7">Plataformas tecnológicas desarrolladas e integradas en la operación diaria. El cliente accede en tiempo real a indicadores, consumos y estado de sus instalaciones.</div>
         </div>
-        <div class="s-eyebrow">Pagina 2 de 7 — entrada principal a la web</div>
-        <div class="s-title">Sectores</div>
-        <p class="s-sub">La web actual tiene una pagina de sectores estatica sin peso en el menu. La propuesta la convierte en la entrada principal con 6 sub-paginas especializadas. Cada una tiene la misma estructura pero contenido especifico del sector.</p>
-        <div class="sc-grid" style="flex:1">
-          <div class="sc dc">
-            <div class="sc-badge">Marca propia registrada</div>
-            <div class="sc-code">01</div>
-            <div class="sc-name">CFS Data Centers</div>
-            <div class="sc-sub">Infraestructura IT critica</div>
-            <ul class="sc-items">
-              <li>Data Hall, UPS, STS, grupos electrogenos</li>
-              <li>Refrigeracion CRAH/CRAC, HVAC</li>
-              <li>Monitorizacion DCIM, BMS</li>
-              <li>PCI, seguridad, logistica interna</li>
-            </ul>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+          <button class="nb" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6);white-space:nowrap;background:transparent" onclick="nav('soporte')">Ver tecnología aplicada →</button>
+          <div style="font-family:monospace;font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.08em;text-align:right">ONE SHOP STATION · Un único proveedor</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)">
+        <div style="background:rgba(255,255,255,.04);padding:24px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px">01 · GMAO</div>
+          <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px">Plataforma de gestión del mantenimiento</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.65">Acceso del cliente en tiempo real. Planificación y seguimiento de OTs, documentación técnico-legal y ejecución móvil desde cualquier dispositivo.</div>
+          <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:5px">
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">Tiempo real</span>
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">Móvil</span>
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">Doc. técnico-legal</span>
           </div>
-          <div class="sc">
-            <div class="sc-code" style="color:var(--hc)">02</div>
-            <div class="sc-name">Healthcare</div>
-            <div class="sc-sub" style="color:var(--hc)">Sector sociosanitario</div>
-            <ul class="sc-items">
-              <li>Gases medicinales, salas blancas</li>
-              <li>Sistemas de emergencia hospitalaria</li>
-              <li>Prevencion de legionelosis</li>
-              <li>Experiencia JCI</li>
-            </ul>
+        </div>
+        <div style="background:rgba(255,255,255,.04);padding:24px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px">02 · ENERGIA</div>
+          <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px">Plataforma de gestión energética</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.65">Todos los suministros y elementos de generacion en una unica plataforma. Alarmas energéticas, control de facturación y analítica comparativa entre edificios.</div>
+          <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:5px">
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">Alarmas</span>
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">Analítica</span>
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">Facturación</span>
           </div>
-          <div class="sc">
-            <div class="sc-code" style="color:var(--ind)">03</div>
-            <div class="sc-name">Industry</div>
-            <div class="sc-sub" style="color:var(--ind)">Automocion, Farma, Manufacturera</div>
-            <ul class="sc-items">
-              <li>Mantenimiento basado en condicion (CBM)</li>
-              <li>Maximizacion disponibilidad de planta</li>
-              <li>Gestion de OEMs</li>
-              <li>Lean Six Sigma</li>
-            </ul>
-          </div>
-          <div class="sc">
-            <div class="sc-code" style="color:var(--ene)">04</div>
-            <div class="sc-name">Energy</div>
-            <div class="sc-sub" style="color:var(--ene)">Servicios energeticos — transversal</div>
-            <ul class="sc-items">
-              <li>ESE acreditada, gestion CAEs</li>
-              <li>Solar FV, cogeneracion</li>
-              <li>ISO 50001, UNE 216701 x3</li>
-              <li>Alumbrado publico, recarga VE</li>
-            </ul>
-          </div>
-          <div class="sc">
-            <div class="sc-code" style="color:var(--fac)">05</div>
-            <div class="sc-name">Facilities</div>
-            <div class="sc-sub" style="color:var(--fac)">Terciario: sedes, comercial, oficinas</div>
-            <ul class="sc-items">
-              <li>Facility Management integral ISO 41011</li>
-              <li>Cuadros de mando, SLAs, KPIs</li>
-              <li>GMAO, Business Intelligence</li>
-              <li>Gestion ciclo de vida de activos</li>
-            </ul>
-          </div>
-          <div class="sc">
-            <div class="sc-code" style="color:var(--spo)">06</div>
-            <div class="sc-name">Sport &amp; Leisure</div>
-            <div class="sc-sub" style="color:var(--spo)">Polideportivos, piscinas, ocio</div>
-            <ul class="sc-items">
-              <li>Gestion integral instalaciones deportivas</li>
-              <li>Programacion tecnico-deportiva</li>
-              <li>Eficiencia energetica</li>
-              <li>Gestion de accesos y recepcion</li>
-            </ul>
+        </div>
+        <div style="background:rgba(255,255,255,.04);padding:24px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px">03 · REPORTING</div>
+          <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px">Cuadro de mando integral</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.65">Información consolidada para el cliente mediante KPIs e indicadores operativos. Comparativas de eficiencia, evolución de consumos y seguimiento de SLAs.</div>
+          <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:5px">
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">KPIs</span>
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">SLAs</span>
+            <span style="font-family:monospace;font-size:9px;padding:2px 7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);letter-spacing:.04em">Comparativas</span>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <!-- /STRIP TECNOLOGIA -->
 
-    <!-- SLIDE 4: SERVICIOS -->
-    <div class="slide">
-      <div class="slide-inner">
-        <div class="nav-map">
-          <div class="nm-item"><div class="nm-title">Quienes somos</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Sectores</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item active"><div class="nm-title">Servicios</div><div class="nm-sub">reorganizado</div><span class="nm-mod">MOD</span></div>
-          <div class="nm-item"><div class="nm-title">Soporte end-to-end</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item"><div class="nm-title">Referencias</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Sostenibilidad</div><div class="nm-sub">se mantiene</div></div>
-          <div class="nm-item"><div class="nm-title">Contacto</div><div class="nm-sub">se mantiene</div></div>
+  <div class="sec">
+    <div class="sec-inner">
+      <div class="s-lbl">Clientes</div>
+      <div class="s-title">Referencias por sector</div>
+      <p class="s-sub">Selección de referencias representativas. <span style="font-family:monospace;font-size:11px;color:var(--blue2);cursor:pointer" onclick="nav('referencias')">Ver referencias completas →</span></p>
+      <div class="gr">
+        <div class="rf"><div class="rf-sec" style="color:var(--dc)">Data Centers</div><div class="rf-name">Mutua Madrilena</div><div class="rf-desc">Torre de Cristal. Mantenimiento integral. Facility Services Hard.</div></div>
+        <div class="rf"><div class="rf-sec" style="color:var(--hc)">Healthcare</div><div class="rf-name">Hospital Puerta del Hierro</div><div class="rf-desc">Majadahonda. Mantenimiento integral de instalaciones hospitalarias.</div></div>
+        <div class="rf"><div class="rf-sec" style="color:var(--ind)">Industry</div><div class="rf-name">Renault</div><div class="rf-desc">Sede y plantas. Nacional. Facility Services + multiservicio en plantas.</div></div>
+        <div class="rf"><div class="rf-sec" style="color:var(--ene)">Energy</div><div class="rf-name">Enagas</div><div class="rf-desc">Nacional. Mantenimiento integral y servicios energéticos.</div></div>
+        <div class="rf"><div class="rf-sec" style="color:var(--fac)">Facilities</div><div class="rf-name">Banco Santander</div><div class="rf-desc">Ciudad Financiera y edificios. Facility Services Hard.</div></div>
+        <div class="rf"><div class="rf-sec" style="color:var(--fac)">Facilities</div><div class="rf-name">Cecabank · ICO · Endesa</div><div class="rf-desc">Sedes corporativas. Facility Services integral.</div></div>
+        <div class="rf"><div class="rf-sec" style="color:var(--spo)">Sport &amp; Leisure</div><div class="rf-name">Madrid Destino</div><div class="rf-desc">Caja Mágica y Matadero. Facility Services integral.</div></div>
+        <div class="rf"><div class="rf-sec" style="color:var(--spo)">Sport &amp; Leisure</div><div class="rf-name">Teatro Campos Eliseos</div><div class="rf-desc">Bilbao. Gestión integral con programación.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec bg">
+    <div class="sec-inner">
+      <div class="s-lbl">Acreditaciones</div>
+      <div class="s-title">Certificaciones</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:20px">
+        <div style="background:var(--white);padding:18px 20px">
+          <div style="font-family:monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--line)">Calidad y gestión</div>
+          <div class="certs"><span class="cert">ISO 9001</span><span class="cert">ISO 14001</span><span class="cert">ISO 45001</span><span class="cert">ISO 50001</span></div>
         </div>
-        <div class="s-eyebrow">Pagina 3 de 7</div>
-        <div class="s-title">Servicios — Portfolio tecnico O&amp;M</div>
-        <p class="s-sub">El portfolio tecnico completo sin filtrar por sector. La web actual lo llama "Mantenimiento" y lo mezcla con instalaciones. Aqui se reorganiza con los titulos tecnicos del Slide 7 de MA.</p>
-        <div class="g6" style="flex:1">
-          <div class="cell">
-            <div class="cell-label" style="color:var(--dc)">Energia electrica</div>
-            <ul class="cell-list">
-              <li>Alta tension y baja tension</li>
-              <li>Grupos electrogenos</li>
-              <li>UPS y STS</li>
-              <li>Bancos de carga</li>
-              <li>LAT1/2, AT1/2</li>
-            </ul>
+        <div style="background:var(--white);padding:18px 20px">
+          <div style="font-family:monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ene);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--line)">Energía y eficiencia</div>
+          <div class="certs"><span class="cert">UNE 216701 PSE Auditoría</span><span class="cert">UNE 216701 PSE Explotación</span><span class="cert">UNE 216701 PSE Inversión</span><span class="cert">EES</span></div>
+        </div>
+        <div style="background:var(--white);padding:18px 20px">
+          <div style="font-family:monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--hc);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--line)">Sostenibilidad ambiental</div>
+          <div class="certs"><span class="cert">ISO 14064</span><span class="cert">Huella de Carbono</span><span class="cert">ISO 20400</span><span class="cert">EcoVadis Platinum</span></div>
+        </div>
+        <div style="background:var(--white);padding:18px 20px">
+          <div style="font-family:monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dc);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--line)">Seguridad y compliance</div>
+          <div class="certs"><span class="cert">ISO 27001</span><span class="cert">ISO 19601</span><span class="cert">ENS · Cat. Media</span></div>
+        </div>
+        <div style="background:var(--white);padding:18px 20px">
+          <div style="font-family:monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ind);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--line)">Responsabilidad social</div>
+          <div class="certs"><span class="cert">IQNet SR10</span><span class="cert">EFR-100-1</span><span class="cert">Pacto Mundial ONU</span></div>
+        </div>
+        <div style="background:var(--white);padding:18px 20px">
+          <div style="font-family:monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--line)">Habilitaciones técnicas</div>
+          <div class="certs"><span class="cert">Reg. Industrial 205979</span><span class="cert">Frigorista Nivel II</span><span class="cert">Gas cat. A</span><span class="cert">Petroliferas PPL II</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /HOME -->
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: QUIENES SOMOS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-quienes">
+
+  <div class="qs-hero">
+    <div class="qs-inner">
+      <div class="h-label" style="color:rgba(255,255,255,.4)">Grupo Clece · Grupo ACS</div>
+      <h1 style="font-size:32px;font-weight:600;color:#fff;letter-spacing:-.5px;margin-bottom:14px;max-width:600px;line-height:1.18">Operación y mantenimiento para infraestructuras de alta exigencia técnica</h1>
+      <p style="font-size:13.5px;color:rgba(255,255,255,.55);max-width:580px;line-height:1.75;font-weight:300">Especialistas en infraestructuras críticas — Data Centers, Healthcare, Sector Industrial y Energía — y en la gestión integral de sedes corporativas e instalaciones deportivas. Cobertura técnica en España y Portugal. Grupo Clece — Grupo ACS.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-inner qs-split">
+      <div>
+        <div class="s-lbl">Trayectoria</div>
+        <div class="s-title">Historia y posiciónamiento</div>
+        <div style="display:flex;flex-direction:column;gap:20px;margin-top:8px">
+          <p style="font-size:13.5px;color:var(--sub);line-height:1.8;font-weight:300">Más de tres decadas de actividad técnica avalan la capacidad de CLECE FS para operar desde instalaciones generales hasta los entornos más exigentes: infraestructuras IT críticas, sector industrial y sociosanitario.</p>
+          <p style="font-size:13.5px;color:var(--sub);line-height:1.8;font-weight:300">Cada sector en el que opera responde a una especialización técnica progresiva. El conocimiento adquirido en cada tipo de instalación ha permitido abordar con garantías sectores de mayor exigencia normativa y operativa.</p>
+          <p style="font-size:13.5px;color:var(--sub);line-height:1.8;font-weight:300">Hoy, como parte del Grupo Clece — Grupo ACS — CLECE FS combina la solidez de un gran grupo con la capacidad técnica de un equipo especializado por sector.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:8px">
+            <div style="background:var(--white);padding:18px 20px"><div style="font-family:monospace;font-size:22px;font-weight:500;color:var(--navy);letter-spacing:-1px">657.166</div><div style="font-size:11px;color:var(--muted);margin-top:5px">OTs ejecutadas en 2025</div></div>
+            <div style="background:var(--white);padding:18px 20px"><div style="font-family:monospace;font-size:22px;font-weight:500;color:var(--navy);letter-spacing:-1px">+500</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Clientes activos</div></div>
+            <div style="background:var(--white);padding:18px 20px"><div style="font-family:monospace;font-size:22px;font-weight:500;color:var(--navy);letter-spacing:-1px">+30</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Años de actividad técnica</div></div>
           </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--dc)">Refrigeracion/HVAC</div>
-            <ul class="cell-list">
-              <li>CRAH/CRAC</li>
-              <li>Produccion frio, calor, ACS</li>
-              <li>Distribucion hidraulica</li>
-              <li>HVAC integral</li>
-              <li>Frigorista nivel II</li>
-            </ul>
+        </div>
+      </div>
+      <div>
+        <div class="s-lbl">Modelo de gestión</div>
+        <div class="s-title">Misión, visión y valores</div>
+        <p class="s-sub">Empresa socialmente comprometida con las personas donde la honestidad, la transparencia y la integridad son valores capitales.</p>
+        <div class="values-grid">
+          <div class="val-item"><div class="val-title">Misión</div><div class="val-desc">Prestar servicios de operación y mantenimiento que garanticen la máxima disponibilidad y fiabilidad de las infraestructuras de nuestros clientes.</div></div>
+          <div class="val-item"><div class="val-title">Visión</div><div class="val-desc">Ser referente nacional en O&amp;M de infraestructuras críticas mediante la especialización sectorial y la mejora continua.</div></div>
+          <div class="val-item"><div class="val-title">Honestidad</div><div class="val-desc">Actuamos con transparencia e integridad en todas nuestras relaciónes: con clientes, proveedores y equipo.</div></div>
+          <div class="val-item"><div class="val-title">Compromiso técnico</div><div class="val-desc">La capacidad técnica y la formación continua son el pilar fundamental para la excelencia en la prestacion de servicios.</div></div>
+          <div class="val-item"><div class="val-title">Seguridad</div><div class="val-desc">Las personas y la seguridad son el principal valor. No hay nada mas importante que preservar la integridad del equipo.</div></div>
+          <div class="val-item"><div class="val-title">Mejora continua</div><div class="val-desc">Metodología Lean aplicada a todas las actividades. Optimización permanente orientada al cliente.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec bg">
+    <div class="sec-inner">
+      <div class="s-lbl">El valor de las personas</div>
+      <div class="s-title">Equipo y capacidad técnica</div>
+      <p class="s-sub">Un equipo humano altamente cualificado, especializado en ingeniería de mantenimiento, es el pilar fundamental para lograr la excelencia en la prestacion de servicios.</p>
+      <div class="g4" style="margin-bottom:32px">
+        <div class="nm"><div class="nm-v">657.166</div><div class="nm-l">OTs ejecutadas en 2025</div></div>
+        <div class="nm"><div class="nm-v">+500</div><div class="nm-l">Clientes activos</div></div>
+        <div class="nm"><div class="nm-v">+30</div><div class="nm-l">Años de actividad técnica</div></div>
+        <div class="nm"><div class="nm-v">6</div><div class="nm-l">Delegaciónes regionales</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:24px">
+        <div style="background:var(--white);padding:16px 20px"><div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:4px">Equipo de ingeniería propio</div><div style="font-size:12px;color:var(--sub)">Ingenieros especializados por sector en plantilla directa. Certificación Lean Six Sigma en gestores.</div></div>
+        <div style="background:var(--white);padding:16px 20px"><div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:4px">Técnicos cualificados en plantilla</div><div style="font-size:12px;color:var(--sub)">Plantilla técnica propia. Formación continua específica por tipo de instalación y sector.</div></div>
+      </div>
+      <div class="values-grid">
+        <div class="val-item"><div class="val-title">Cultura</div><div class="val-desc">Empresa socialmente comprometida. Honestidad, transparencia e integridad como valores capitales en todas nuestras relaciónes.</div></div>
+        <div class="val-item"><div class="val-title">Capacidad técnica</div><div class="val-desc">Ingenieros especializados con certificación Lean Six Sigma. Actualización permanente de conocimientos y empleo de nuevas tecnologías.</div></div>
+        <div class="val-item"><div class="val-title">Formación continua</div><div class="val-desc">Planes de formación específicos por sector. Potenciacion del desarrollo personal y profesional de todos los colaboradores.</div></div>
+        <div class="val-item"><div class="val-title">Cumplimiento normativo</div><div class="val-desc">Sistema de Compliance (ISO 19601) que garantiza el riguroso desarrollo de actividades conforme a leyes, reglamentos y practicas eticas.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-inner">
+      <div class="s-lbl">Prevención de riesgos laborales</div>
+      <div class="s-title">Seguridad y salud en el trabajo</div>
+      <p class="s-sub">CLECE FS desarrolla planes de prevención específicos para cada servicio, identificando, evaluando, controlando y minimizando los posibles riesgos desde el origen. Certificación ISO 45001.</p>
+      <div class="prl-grid">
+        <div class="prl"><div class="prl-num">01</div><div class="prl-text">Las personas y la seguridad son el principal valor. No hay nada mas importante.</div></div>
+        <div class="prl"><div class="prl-num">02</div><div class="prl-text">La seguridad es responsabilidad de la Dirección y ha de ser asumida por cada empleado.</div></div>
+        <div class="prl"><div class="prl-num">03</div><div class="prl-text">Cualquier miembro esta obligado a comunicar cualquier situación de riesgo que pueda generar accidentes.</div></div>
+        <div class="prl"><div class="prl-num">04</div><div class="prl-text">Cualquier accidente puede ser evitado. La prevención es una inversión, no un coste.</div></div>
+        <div class="prl"><div class="prl-num">05</div><div class="prl-text">La actividad preventiva debe proyectarse en la planificación del trabajo y en las condiciónes en que se presente.</div></div>
+        <div class="prl"><div class="prl-num">06</div><div class="prl-text">Si una situación de peligro derivara en riesgo grave e inminente, cualquier empleado puede suspender la actividad.</div></div>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
+        <span class="cert" style="cursor:pointer">↓ Politica de Gestión SST (PDF)</span>
+        <span class="cert">ISO 45001</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec bg">
+    <div class="sec-inner">
+      <div class="s-lbl">Cobertura geográfica</div>
+      <div class="s-title">Oficinas centrales y 6 Direcciones Regionales</div>
+      <p class="s-sub">Presencia directa en España y Portugal a traves de 6 Direcciones Regionales y Oficinas Centrales en Madrid. Los contratos se dirigen desde la delegación con mayor capacidad técnica para el sector, con independencia de la ubicación geográfica. Como parte del Grupo Clece — Grupo ACS — con presencia tambien en Reino Unido.</p>
+      <div style="margin-bottom:20px;padding:16px 20px;background:var(--navy);border-left:3px solid var(--blue2)">
+        <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:5px">Oficinas Centrales</div>
+        <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:3px">Parque Empresarial Via Norte · Edificio 4</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.55)">C/ Quintanavides 19, 1a planta · 28050 Madrid</div>
+      </div>
+      <div class="deleg-grid">
+        <div class="deleg"><div class="deleg-name">Dir. Regional Centro</div><div class="deleg-loc">Av. Manoteras 46 bis, 2a planta · Madrid</div><div class="deleg-provincias">Madrid · Castilla-La Mancha · Extremadura</div></div>
+        <div class="deleg"><div class="deleg-name">Dir. Regional Noroeste</div><div class="deleg-loc">C/ Ducado 2 · 47009 Valladolid</div><div class="deleg-provincias">Castilla y Leon · Galicia · Asturias · Cantabria · Portugal</div></div>
+        <div class="deleg"><div class="deleg-name">Dir. Regional Nordeste</div><div class="deleg-loc">C/ Josep Ferrater i Mora, 2-4 · 08019 Barcelona</div><div class="deleg-provincias">Cataluña · Aragon · Navarra · Pais Vasco · La Rioja</div></div>
+        <div class="deleg"><div class="deleg-name">Dir. Regional Levante</div><div class="deleg-loc">Parque Tecnológico, C/ Conde Alessandro Volta, 2-4-6 · 46980 Paterna</div><div class="deleg-provincias">Comunidad Valenciana · Baleares</div></div>
+        <div class="deleg"><div class="deleg-name">Dir. Regional Sur</div><div class="deleg-loc">Avda. República Argentina, 21B, Pl. 3 · 41011 Sevilla</div><div class="deleg-provincias">Andalucia · Murcia</div></div>
+        <div class="deleg"><div class="deleg-name">Dir. Regional Canarias</div><div class="deleg-loc">Pol. Ind. Las Rubiesas, C/ Ignacio Ellacuria, 23-26 · 35214 Telde</div><div class="deleg-provincias">Islas Canarias</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-inner">
+      <div class="s-lbl">Habilitaciones</div>
+      <div class="s-title">Registro y certificaciones</div>
+      <div class="certs" style="margin-top:18px">
+        <span class="cert">Reg. Industrial 205979</span><span class="cert">ISO 9001</span><span class="cert">ISO 14001</span><span class="cert">ISO 50001</span><span class="cert">ISO 45001</span><span class="cert">ISO 19601</span><span class="cert">ISO 27001</span><span class="cert">ISO 20400</span><span class="cert">ISO 14064</span><span class="cert">EcoVadis Platinum</span><span class="cert">IQNet SR10</span><span class="cert">EFR-100-1</span><span class="cert">Lean Six Sigma</span><span class="cert">Frigorista Nivel II</span><span class="cert">Gas cat. A</span><span class="cert">Petroliferas PPL II</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /QUIENES SOMOS -->
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: SECTORES (hub) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-sectores">
+  <div class="sec" style="padding-top:48px">
+    <div class="sec-inner">
+      <div class="s-lbl">Clasificación sectorial</div>
+      <div class="s-title">Servicios especializados por sector</div>
+      <p class="s-sub">CLECE FS organiza su actividad en función de las exigencias técnicas, normativas y operativas de cada sector. Selecciona un sector para ver los servicios específicos, habilitaciones y referencias.</p>
+      <div class="g3">
+        <div class="sc dc" onclick="navSector('dc')"><div class="sc-badge">Marca propia registrada</div><div class="sc-code">01 / Data Centers</div><div class="sc-name">CFS Data Centers</div><div class="sc-sect">Infraestructura IT crítica</div><div class="sc-desc">O&amp;M para centros de datos. Disponibilidad 24/365.</div><div class="sc-link">Ver sector →</div></div>
+        <div class="sc" onclick="navSector('hc')"><div class="sc-code" style="color:var(--hc)">02 / Healthcare</div><div class="sc-name">Sector sociosanitario</div><div class="sc-sect">Hospitales · Centros médicos · Residencias</div><div class="sc-desc">Normativa específica: gases medicinales, salas blancas, JCI.</div><div class="sc-link" style="color:var(--hc)">Ver sector →</div></div>
+        <div class="sc" onclick="navSector('ind')"><div class="sc-code" style="color:var(--ind)">03 / Industry</div><div class="sc-name">Sector industrial</div><div class="sc-sect">Automoción · Farma · Manufacturera</div><div class="sc-desc">Maximización de la disponibilidad de planta. CBM. Lean Six Sigma.</div><div class="sc-link" style="color:var(--ind)">Ver sector →</div></div>
+        <div class="sc" onclick="navSector('ene')"><div class="sc-code" style="color:var(--ene)">04 / Energy</div><div class="sc-name">Servicios energéticos</div><div class="sc-sect">Transversal a todos los sectores</div><div class="sc-desc">ESE acreditada. CAEs. ISO 50001. UNE 216701 en tres modalidades.</div><div class="sc-link" style="color:var(--ene)">Ver sector →</div></div>
+        <div class="sc" onclick="navSector('fac')"><div class="sc-code" style="color:var(--fac)">05 / Facilities</div><div class="sc-name">Sector terciario</div><div class="sc-sect">Sedes corporativas · Comercial · Oficinas</div><div class="sc-desc">FM integral ISO 41011. GMAO. SLAs y KPIs. Gestión del dato.</div><div class="sc-link" style="color:var(--fac)">Ver sector →</div></div>
+        <div class="sc" onclick="navSector('spo')"><div class="sc-code" style="color:var(--spo)">06 / Sport &amp; Leisure</div><div class="sc-name">Instalaciones deportivas</div><div class="sc-sect">Polideportivos · Piscinas · Ocio</div><div class="sc-desc">Gestión integral. Programación técnico-deportiva.</div><div class="sc-link" style="color:var(--spo)">Ver sector →</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: SECTOR DETAIL (shared template) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-sector-detail">
+  <div class="sector-hero" id="sector-hero-area">
+    <div class="sector-hero-inner">
+      <div>
+        <div class="s-breadcrumb"><span onclick="nav('sectores')">Sectores</span> / <span id="sh-code">CFS Data Centers</span></div>
+        <div class="sector-code" id="sh-label"></div>
+        <div class="sector-name" id="sh-name"></div>
+        <div class="sector-sub" id="sh-sub"></div>
+        <div class="sector-desc" id="sh-desc"></div>
+        <div class="sector-certs-mini" id="sh-certs"></div>
+      </div>
+    </div>
+  </div>
+  <div id="sector-body"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: SERVICIOS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-servicios">
+  <div class="sec" style="padding-top:48px">
+    <div class="sec-inner">
+      <div class="s-lbl">Capacidad técnica</div>
+      <div class="s-title">Portfolio de servicios O&amp;M</div>
+      <p class="s-sub">CLECE FS presta servicios de Operación y Mantenimiento para sistemas críticos e infraestructuras generales. Habilitada a nivel nacional con registro industrial número 205979.</p>
+      <div class="g6">
+        <div class="pt"><div class="pt-top" style="background:var(--dc)"></div><div class="pt-title">Energía eléctrica</div><div class="pt-sub">Alta/BT · Críticos</div><ul class="pt-list"><li>Alta tensión y baja tensión</li><li>Grupos electrógenos</li><li>UPS · STS · Bancos de carga</li><li>Instalaciones AT: LAT1/2 · AT1/2</li></ul></div>
+        <div class="pt"><div class="pt-top" style="background:var(--spo)"></div><div class="pt-title">Refrigeración / HVAC</div><div class="pt-sub">Térmico · Fluidos</div><ul class="pt-list"><li>CRAH / CRAC</li><li>Producción de frio, calor y ACS</li><li>Distribución hidráulica</li><li>HVAC integral · Frigorista nivel II</li></ul></div>
+        <div class="pt"><div class="pt-top" style="background:var(--red)"></div><div class="pt-title">PCI y seguridad</div><div class="pt-sub">Protección contraincendios</div><ul class="pt-list"><li>Extintores, BIEs, grupos PCI</li><li>Extinción automática</li><li>Sistemás de detección</li><li>Monitorización 24/365</li></ul></div>
+        <div class="pt"><div class="pt-top" style="background:var(--ene)"></div><div class="pt-title">Monitorización y telecom</div><div class="pt-sub">CMMS · BMS · DCIM · Plataforma energética</div><ul class="pt-list"><li>Implantación y gestión de CMMS / GMAO</li><li>Gestión y operación de BMS</li><li>Plataformas DCIM</li><li>Cuadro de mando integral con KPIs</li><li>Plataforma energética: alarmas, analítica y control de facturación</li><li>Cableado de fibra</li></ul></div>
+        <div class="pt"><div class="pt-top" style="background:var(--hc)"></div><div class="pt-title">Instalaciones generales</div><div class="pt-sub">Fluidos · Saneamiento</div><ul class="pt-list"><li>Fontanería y saneamiento</li><li>Tratamiento de agua · Legionela</li><li>Gas cat. A · Petroliferas PPL II</li><li>Gases fluorados · Biocidas</li></ul></div>
+        <div class="pt" style="border-left:2px solid var(--navy)"><div class="pt-top" style="background:var(--navy)"></div><div class="pt-title">Ingeniería y consultoría</div><div class="pt-sub">Alto valor anadido</div><ul class="pt-list"><li>Ingeniería de mantenimiento</li><li>Consultoría energética</li><li>Asesoramiento en CMMS</li><li>Gestión de OEMs y proveedores</li><li>ESE · Auditorías energéticas</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec bg">
+    <div class="sec-inner">
+      <div class="s-lbl">Capacidad operativa</div>
+      <div class="s-title">CLECE FS en cifras</div>
+      <div class="g4" style="margin-top:24px">
+        <div class="nm"><div class="nm-v">657.166</div><div class="nm-l">Órdenes de trabajo ejecutadas en 2025</div></div>
+        <div class="nm"><div class="nm-v">525.984</div><div class="nm-l">OTs preventivas 2025</div></div>
+        <div class="nm"><div class="nm-v">49.021</div><div class="nm-l">OTs predictivas 2025</div></div>
+        <div class="nm"><div class="nm-v">71.263</div><div class="nm-l">OTs correctivas 2025</div></div>
+        <div class="nm"><div class="nm-v">120</div><div class="nm-l">Ingenieros especializados en plantilla</div></div>
+        <div class="nm"><div class="nm-v">2.330</div><div class="nm-l">Técnicos cualificados</div></div>
+        <div class="nm"><div class="nm-v">+500</div><div class="nm-l">Clientes activos</div></div>
+        <div class="nm"><div class="nm-v">6+PT</div><div class="nm-l">Delegaciónes regionales ES+PT</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-inner">
+      <div class="s-lbl">Acreditaciones</div>
+      <div class="s-title">Habilitaciones técnicas</div>
+      <div class="certs" style="margin-top:18px">
+        <span class="cert">Reg. Industrial 205979</span><span class="cert">Frigorista Nivel II</span><span class="cert">Gas cat. A</span><span class="cert">Petroliferas PPL II</span><span class="cert">Gases fluorados</span><span class="cert">Biocidas</span><span class="cert">LAT1/2 · AT1/2</span><span class="cert">ISO 9001</span><span class="cert">ISO 14001</span><span class="cert">ISO 50001</span><span class="cert">UNE 216701 x3</span><span class="cert">EcoVadis Platinum</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: SOPORTE END-TO-END -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-soporte">
+  <div class="sec" style="padding-top:48px">
+    <div class="sec-inner">
+      <div class="s-lbl">Ciclo de vida de las infraestructuras</div>
+      <div class="s-title">Soporte técnico end-to-end</div>
+      <p class="s-sub">CLECE FS presta servicios técnicos especializados en todas las etapas del ciclo de vida de las infraestructuras, garantizando fiabilidad, eficiencia y cumplimiento normativo.</p>
+      <div class="lcy">
+        <div class="lc"><div class="lc-n">01 · Diseño</div><div class="lc-title">Asesoría en fase de diseño</div><div class="lc-sub">Orientación técnica previa</div><div class="lc-desc">Orientación técnica previa a la construcción o reforma. Definición de requisitos para la mantenibilidad y fiabilidad a largo plazo.</div><ul class="lc-list"><li>Complementar criterios de diseño con orientación a la eficiencia operativa</li><li>Definir requisitos técnicos para la mantenibilidad y la fiabilidad</li><li>Asesoramiento sobre estándares y buenas prácticas del sector</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Optimización de operaciones futuras. Reducción del riesgo de rediseños costosos.</div></div></div>
+        <div class="lc"><div class="lc-n">02 · Implementación</div><div class="lc-title">Supervisión e instalación</div><div class="lc-sub">Commissioning y arranque</div><div class="lc-desc">Participación en el proceso de instalación verificando el cumplimiento de las específicaciones técnicas y asistencia en commissioning.</div><ul class="lc-list"><li>Supervisión verificando cumplimiento de específicaciones</li><li>Orientación técnica durante fases críticas del proyecto</li><li>Asistencia en procesos de commissioning y puesta en marcha</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Garantía de calidad y disponibilidad operativa desde el primer día.</div></div></div>
+        <div class="lc act"><div class="lc-n">03 · Operación y Mantenimiento</div><div class="lc-title">O&amp;M 24/365</div><div class="lc-sub">Core del negocio CFS</div><div class="lc-desc">Monitorización continua, mantenimiento preventivo, predictivo y correctivo. Resolución proactiva de incidencias.</div><ul class="lc-list"><li>Monitorización continua y analisis de indicadores operativos</li><li>Mantenimiento preventivo, técnico-legal y predictivo</li><li>Analisis predictivo · Gestión de repuestos y logistica</li><li>Auditorías de cumplimiento y reporting técnico</li><li>Resolución proactiva de incidencias</li><li>Cuadro de mando integral: KPIs e indicadores consolidados para el cliente</li><li>Plataforma de gestión energética: monitorización de suministros, alarmas, control de gasto y analítica comparativa</li><li>Plataforma GMAO: planificación de OTs, seguimiento en tiempo real, documentación técnico-legal</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Maximizar disponibilidad y fiabilidad. Reducción de paradas no planificadas. Información consolidada y accesible para la toma de decisiones del cliente.</div></div></div>
+        <div class="lc lean"><div class="lc-n">Transversal · Mejora continua</div><div class="lc-title">Metodología Lean</div><div class="lc-sub">Aplicada a las tres fases</div><div class="lc-desc">Visión completa de la cadena de valor. Identificación de mudas. Estandarización de actividades. Mejora orientada al cliente.</div><ul class="lc-list"><li>Visión completa de la cadena de valor operativa</li><li>Identificación de mudas y oportunidades de mejora</li><li>Estandarización de actividades y procesos</li><li>Mejora continua orientada al cliente final</li></ul><div class="lc-val"><div class="lc-val-lbl">Valor aportado</div><div class="lc-val-txt">Optimización permanente de la operación a lo largo del tiempo.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec bg">
+    <div class="sec-inner">
+      <div class="s-lbl">Tecnología aplicada a la operación</div>
+      <div class="s-title">Herramientas propias de gestión</div>
+      <p class="s-sub">CLECE FS opera con plataformas tecnológicas propias integradas en el día a día del servicio. No son herramientas externas: están configuradas, gestionadas y evolucionadas por el equipo técnico de CFS. El cliente tiene acceso directo a sus datos en tiempo real.</p>
+      <div class="g3" style="margin-top:8px">
+
+        <div style="background:var(--white);border:1px solid var(--line);padding:0;overflow:hidden">
+          <div style="background:var(--navy);padding:18px 22px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">01 · GMAO</div>
+            <div style="font-size:15px;font-weight:600;color:#fff">Plataforma de gestión del mantenimiento</div>
           </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--red)">PCI y seguridad</div>
-            <ul class="cell-list">
-              <li>Extintores, BIEs, grupos PCI</li>
-              <li>Extincion automatica</li>
-              <li>Sistemas de deteccion</li>
-              <li>Monitorizacion 24/365</li>
-            </ul>
+          <div style="padding:22px">
+            <div style="font-size:12.5px;color:var(--sub);line-height:1.7;margin-bottom:16px">Desarrollada en entorno web con acceso del cliente en tiempo real. Centraliza la planificación, seguimiento y documentación de todos los servicios de mantenimiento.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Planificación y organización de mantenimiento programado</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Recepción, asignación y seguimiento de solicitudes de AT</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Control de documentación técnico-legal</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Ejecución y seguimiento móvil desde dispositivos en campo</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Optimización de la fiabilidad e integridad de datos</div>
+            </div>
+            <div style="background:var(--surface);padding:10px 12px;border-top:1px solid var(--line)">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Valor para el cliente</div>
+              <div style="font-size:11.5px;color:var(--sub)">Visibilidad total sobre el estado de sus instalaciones. Reducción del papel y del tiempo de gestión.</div>
+            </div>
           </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--ene)">Monitorizacion/telecom</div>
-            <ul class="cell-list">
-              <li>CMMS / GMAO</li>
-              <li>Gestion y operacion BMS</li>
-              <li>Plataformas DCIM</li>
-              <li>Cableado de fibra</li>
-            </ul>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--line);padding:0;overflow:hidden">
+          <div style="background:var(--ene);padding:18px 22px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">02 · ENERGIA</div>
+            <div style="font-size:15px;font-weight:600;color:#fff">Plataforma de gestión energética</div>
           </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--hc)">Instalaciones generales</div>
-            <ul class="cell-list">
-              <li>Fontaneria y saneamiento</li>
-              <li>Tratamiento agua / legionela</li>
-              <li>Gas cat. A</li>
-              <li>Petroliferas PPL II</li>
-              <li>Gases fluorados, biocidas</li>
-            </ul>
+          <div style="padding:22px">
+            <div style="font-size:12.5px;color:var(--sub);line-height:1.7;margin-bottom:16px">Herramienta propia que integra todos los suministros energéticos y elementos de generacion distribuida en una unica plataforma de monitorización y analisis.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--ene);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Carga y validación de facturación de suministros</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--ene);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Alarmas energéticas por desviaciones de consumo y coste</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--ene);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Control del gasto ejecutado frente al previsto</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--ene);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Analítica: comparativas de evolución entre edificios</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--ene);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Integración de solar FV, cogeneración y otras fuentes</div>
+            </div>
+            <div style="background:var(--surface);padding:10px 12px;border-top:1px solid var(--line)">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Valor para el cliente</div>
+              <div style="font-size:11.5px;color:var(--sub)">Visión global del comportamiento energético. Optimización de la factura. Detección temprana de desviaciones.</div>
+            </div>
           </div>
-          <div class="cell" style="border-left:2px solid var(--navy)">
-            <div class="cell-label" style="color:var(--navy)">Ingenieria y consultoria</div>
-            <ul class="cell-list">
-              <li>Ingenieria de mantenimiento</li>
-              <li>Consultoria energetica</li>
-              <li>Asesoramiento CMMS</li>
-              <li>Gestion OEMs y proveedores</li>
-              <li>ESE / auditorias energeticas</li>
-            </ul>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--line);padding:0;overflow:hidden">
+          <div style="background:var(--blue2);padding:18px 22px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">03 · REPORTING</div>
+            <div style="font-size:15px;font-weight:600;color:#fff">Cuadro de mando integral</div>
+          </div>
+          <div style="padding:22px">
+            <div style="font-size:12.5px;color:var(--sub);line-height:1.7;margin-bottom:16px">Información consolidada para el cliente mediante cuadros de mando e indicadores operativos. Una visión ejecutiva y técnica del estado de sus infraestructuras.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>KPIs e indicadores operativos consolidados</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Seguimiento de SLAs contratados</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Comparativas de eficiencia entre centros o periodos</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Indicadores de eficiencia energética por edificio</div>
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--sub)"><span style="color:var(--blue2);font-weight:600;font-family:monospace;flex-shrink:0">›</span>Reporting ejecutivo y técnico personalizado</div>
+            </div>
+            <div style="background:var(--surface);padding:10px 12px;border-top:1px solid var(--line)">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Valor para el cliente</div>
+              <div style="font-size:11.5px;color:var(--sub)">Toma de decisiones informada. Transparencia total sobre el servicio contratado.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="sec navy">
+    <div class="sec-inner">
+      <div class="s-lbl">Por que elegir CFS</div>
+      <div class="s-title">Argumento diferenciador</div>
+      <div style="border:1px solid rgba(255,255,255,.15);padding:24px 28px;margin-bottom:28px;background:rgba(255,255,255,.04)">
+        <div style="font-family:monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">One Shop Station</div>
+        <div style="font-size:18px;font-weight:600;color:#fff;margin-bottom:10px">Un único proveedor para todo el ciclo de vida</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.75;max-width:580px">Un único proveedor para el diseño, la implementación, la operación y el mantenimiento de sus infraestructuras. Menos coordinación, menos riesgo, menor coste total.</div>
+      </div>
+      <p class="s-sub">La mayoria de proveedores de mantenimiento solo ofrecen la fase de O&amp;M. CLECE FS complementa el diseño, supervisa la implementación y garantiza el O&amp;M. Una sola empresa a lo largo de todo el ciclo de vida reduce riesgos, mejora la coordinación y optimiza el coste total de propiedad.</p>
+      <div class="g3" style="margin-top:8px">
+        <div style="background:rgba(255,255,255,.06);padding:24px;border:1px solid rgba(255,255,255,.1)"><div style="font-family:monospace;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:8px;letter-spacing:.08em">RESULTADO 1</div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px">Reducción del riesgo de rediseños</div><div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.6">La orientación técnica en la fase de diseño evita errores costosos de instalación detectados solo durante la operación.</div></div>
+        <div style="background:rgba(255,255,255,.06);padding:24px;border:1px solid rgba(255,255,255,.1)"><div style="font-family:monospace;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:8px;letter-spacing:.08em">RESULTADO 2</div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px">Disponibilidad desde el primer día</div><div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.6">La participación en el commissioning garantiza que los sistemas arrancan correctamente y el equipo de O&amp;M los conoce desde el inicio.</div></div>
+        <div style="background:rgba(255,255,255,.06);padding:24px;border:1px solid rgba(255,255,255,.1)"><div style="font-family:monospace;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:8px;letter-spacing:.08em">RESULTADO 3</div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px">Optimización del coste total</div><div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.6">La mejora continua Lean aplicada en las tres fases reduce el coste de propiedad a largo plazo y maximiza la vida util de los activos.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: REFERENCIAS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-referencias">
+  <div class="sec" style="padding-top:48px">
+    <div class="sec-inner">
+      <div class="s-lbl">Clientes</div>
+      <div class="s-title">Referencias por sector</div>
+      <p class="s-sub">Selección de referencias representativas. Cada referencia incluye el sector, la ubicación y la descripción del servicio prestado.</p>
+      <div class="ref-filter">
+        <button class="rf-btn on" onclick="filterRefs(this,'all')">Todos</button>
+        <button class="rf-btn" onclick="filterRefs(this,'dc')">Data Centers</button>
+        <button class="rf-btn" onclick="filterRefs(this,'hc')">Healthcare</button>
+        <button class="rf-btn" onclick="filterRefs(this,'ind')">Industry</button>
+        <button class="rf-btn" onclick="filterRefs(this,'ene')">Energy</button>
+        <button class="rf-btn" onclick="filterRefs(this,'fac')">Facilities</button>
+        <button class="rf-btn" onclick="filterRefs(this,'spo')">Sport &amp; Leisure</button>
+      </div>
+      <div id="refs-list">
+        <div class="ref-card" data-sector="dc"><div class="ref-card-top"><div class="ref-client">Mutua Madrilena</div><span class="ref-sector-badge" style="background:#DBEAFE;color:var(--dc)">DATA CENTERS</span></div><div class="ref-location">Torre de Cristal · Madrid</div><div class="ref-service">Mantenimiento integral de instalaciones críticas. Facility Services Hard. Sistemás de energía, refrigeración, PCI y monitorización BMS.</div></div>
+        <div class="ref-card" data-sector="dc"><div class="ref-card-top"><div class="ref-client">Intersion</div><span class="ref-sector-badge" style="background:#DBEAFE;color:var(--dc)">DATA CENTERS</span></div><div class="ref-location">Centro de procesamiento de datos · Madrid</div><div class="ref-service">Facility Services integral. O&amp;M preventivo, predictivo y correctivo de todos los sistemas críticos del CPD.</div></div>
+        <div class="ref-card" data-sector="hc"><div class="ref-card-top"><div class="ref-client">Hospital Puerta del Hierro</div><span class="ref-sector-badge" style="background:#D1FAE5;color:var(--hc)">HEALTHCARE</span></div><div class="ref-location">Majadahonda · Madrid</div><div class="ref-service">Mantenimiento integral de instalaciones hospitalarias. Gases medicinales, climatización, electricidad, PCI y sistemas de emergencia.</div></div>
+        <div class="ref-card" data-sector="hc"><div class="ref-card-top"><div class="ref-client">Residencia Alzheimer Madrid</div><span class="ref-sector-badge" style="background:#D1FAE5;color:var(--hc)">HEALTHCARE</span></div><div class="ref-location">Madrid</div><div class="ref-service">Acreditación JCI. Facility Services integral. Mantenimiento de instalaciones sociosanitarias de alta exigencia normativa.</div></div>
+        <div class="ref-card" data-sector="ind"><div class="ref-card-top"><div class="ref-client">Renault</div><span class="ref-sector-badge" style="background:#FEF3C7;color:var(--ind)">INDUSTRY</span></div><div class="ref-location">Sede y plantas · Nacional</div><div class="ref-service">Facility Services + multiservicio en plantas de producción. Mantenimiento eléctrico, HVAC e instalaciones generales.</div></div>
+        <div class="ref-card" data-sector="ind"><div class="ref-card-top"><div class="ref-client">Siegfried</div><span class="ref-sector-badge" style="background:#FEF3C7;color:var(--ind)">INDUSTRY</span></div><div class="ref-location">Multi-ubicación · Nacional</div><div class="ref-service">Farma. Multiservicio en plantas de producción. Mantenimiento de salas blancas, HVAC y sistemas eléctricos.</div></div>
+        <div class="ref-card" data-sector="ene"><div class="ref-card-top"><div class="ref-client">Enagas</div><span class="ref-sector-badge" style="background:#EDE9FE;color:var(--ene)">ENERGY</span></div><div class="ref-location">Nacional</div><div class="ref-service">Mantenimiento integral y servicios energéticos. Auditoría energética, explotación e inversión. Gestión de CAEs.</div></div>
+        <div class="ref-card" data-sector="fac"><div class="ref-card-top"><div class="ref-client">Banco Santander</div><span class="ref-sector-badge" style="background:#EFF6FF;color:var(--fac)">FACILITIES</span></div><div class="ref-location">Ciudad Financiera y edificios corporativos</div><div class="ref-service">Facility Services Hard. Mantenimiento integral de instalaciones en sede central y red de edificios corporativos.</div></div>
+        <div class="ref-card" data-sector="fac"><div class="ref-card-top"><div class="ref-client">Umivale Activa</div><span class="ref-sector-badge" style="background:#EFF6FF;color:var(--fac)">FACILITIES</span></div><div class="ref-location">Nacional</div><div class="ref-service">Conserjería, limpieza y mantenimiento integral. Gestión unificada de servicios de FM en todos los centros de la mutua.</div></div>
+        <div class="ref-card" data-sector="fac"><div class="ref-card-top"><div class="ref-client">Cecabank · ICO · Endesa</div><span class="ref-sector-badge" style="background:#EFF6FF;color:var(--fac)">FACILITIES</span></div><div class="ref-location">Sedes corporativas · Madrid</div><div class="ref-service">Facility Services integral. Mantenimiento hard, soft y gestión de accesos en sedes corporativas.</div></div>
+        <div class="ref-card" data-sector="spo"><div class="ref-card-top"><div class="ref-client">Madrid Destino</div><span class="ref-sector-badge" style="background:#CFFAFE;color:var(--spo)">SPORT &amp; LEISURE</span></div><div class="ref-location">Caja Mágica y Matadero · Madrid</div><div class="ref-service">Facility Services integral. Mantenimiento de instalaciones deportivas y culturales de referencia en Madrid.</div></div>
+        <div class="ref-card" data-sector="spo"><div class="ref-card-top"><div class="ref-client">Teatro Campos Eliseos</div><span class="ref-sector-badge" style="background:#CFFAFE;color:var(--spo)">SPORT &amp; LEISURE</span></div><div class="ref-location">Bilbao</div><div class="ref-service">Gestión integral con programación técnico-cultural. Mantenimiento de instalaciones escénicas, electricidad y climatización.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: SOSTENIBILIDAD -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-sost">
+  <div class="sost-tabs" id="sost-tabs">
+    <div class="st on" onclick="switchSost('ambiental',this)">Ambiental</div>
+    <div class="st" onclick="switchSost('social',this)">Social</div>
+    <div class="st" onclick="switchSost('gobierno',this)">Buen gobierno</div>
+  </div>
+  <div class="sost-page active" id="sost-ambiental">
+    <div class="sec"><div class="sec-inner">
+      <div class="s-lbl">Sostenibilidad ambiental</div>
+      <div class="s-title">Compromiso medioambiental</div>
+      <p class="s-sub">CLECE FS gestióna los recursos de manera racional velando por la sostenibilidad ambiental, económica y social. ISO 14001 e ISO 14064 como marcos de referencia.</p>
+      <div class="g3">
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">ISO 14001 · Gestión ambiental</div><div class="val-desc" style="margin-top:6px">Sistema de gestión ambiental certificado. Identificación, evaluación y control de los aspectos e impactos ambientales de la actividad.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">ISO 14064 · Huella de carbono</div><div class="val-desc" style="margin-top:6px">Cuantificación y reporte de emisiónes de gases de efecto invernadero. Plan de descarbonización progresiva de la operación.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">ISO 50001 · Energía</div><div class="val-desc" style="margin-top:6px">Sistema de gestión de la energía. Reducción del consumo y de la factura energética de los clientes. Certificados de Ahorro Energético (CAEs).</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">EcoVadis Platinum</div><div class="val-desc" style="margin-top:6px">Máxima calificación de EcoVadis en responsabilidad social corporativa. Evaluación independiente de prácticas ambientales, sociales y de gobernanza.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Flota ecológica</div><div class="val-desc" style="margin-top:6px">Plan de renovación progresiva de la flota hacia vehiculos de bajas emisiónes. Gestión de la móvilidad sostenible en operaciones de campo.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Residuos y materiales</div><div class="val-desc" style="margin-top:6px">Gestión responsable de residuos derivados de la actividad de mantenimiento. Valorización, reciclaje y tratamiento conforme a normativa.</div></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="sost-page" id="sost-social">
+    <div class="sec"><div class="sec-inner">
+      <div class="s-lbl">Sostenibilidad social</div>
+      <div class="s-title">Compromiso social y con las personas</div>
+      <p class="s-sub">Las personas son el principal valor de CLECE FS. El compromiso social se materializa en politicas activas de igualdad, prevención de riesgos y acción social.</p>
+      <div class="g3" style="margin-bottom:32px">
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">IQNet SR10 · Responsabilidad social</div><div class="val-desc" style="margin-top:6px">Certificación de responsabilidad social empresarial. Marco de gestión de compromisos con grupos de interes.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Pacto Mundial ONU</div><div class="val-desc" style="margin-top:6px">Adheridos al Pacto Mundial de las Naciones Unidas. Compromiso con los 10 principios en materia de derechos humaños, laborales, medio ambiente y anticorrupcion.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Plan de Igualdad · EFR-100-1</div><div class="val-desc" style="margin-top:6px">Plan de igualdad vigente. Certificación EFR-100-1 como empresa familiarmente responsable.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">ISO 45001 · PRL</div><div class="val-desc" style="margin-top:6px">Certificación del sistema de gestión de la seguridad y salud en el trabajo. Planes de prevención específicos por servicio.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Corazon y Maños</div><div class="val-desc" style="margin-top:6px">Asociacion sin animo de lucro nacida del compromiso social de los trabajadores de Clece y filiales. Impulsa una sociedad mas justa ayudando a personas en situaciónes delicadas.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Prevención de riesgos</div><div class="val-desc" style="margin-top:6px">6 principios prioritarios de seguridad. Formación específica por actividad. Politica de gestión SST publicada y disponible. <span style="font-family:monospace;font-size:10px;color:var(--blue2);cursor:pointer">↓ Descargar politica SST</span></div></div>
+      </div>
+      <div class="s-lbl">6 principios PRL</div>
+      <div class="prl-grid">
+        <div class="prl"><div class="prl-num">01</div><div class="prl-text">Las personas y la seguridad son el principal valor. No hay nada mas importante.</div></div>
+        <div class="prl"><div class="prl-num">02</div><div class="prl-text">La seguridad es responsabilidad de la Dirección y ha de ser asumida por cada empleado.</div></div>
+        <div class="prl"><div class="prl-num">03</div><div class="prl-text">Cualquier miembro esta obligado a comunicar cualquier situación de riesgo.</div></div>
+        <div class="prl"><div class="prl-num">04</div><div class="prl-text">Cualquier accidente puede ser evitado.</div></div>
+        <div class="prl"><div class="prl-num">05</div><div class="prl-text">La actividad preventiva debe proyectarse en la planificación del trabajo.</div></div>
+        <div class="prl"><div class="prl-num">06</div><div class="prl-text">Si una situación de peligro derivara en riesgo grave, cualquier empleado puede suspender la actividad.</div></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="sost-page" id="sost-gobierno">
+    <div class="sec"><div class="sec-inner">
+      <div class="s-lbl">Buen gobierno</div>
+      <div class="s-title">Gobierno corporativo y compliance</div>
+      <p class="s-sub">CLECE FS cuenta con un sistema de compliance robusto que garantiza el desarrollo de sus actividades conforme a las leyes, reglamentos, normas y prácticas éticas.</p>
+      <div class="g3">
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">ISO 19601 · Compliance</div><div class="val-desc" style="margin-top:6px">Sistema de gestión de compliance penal. Marco normativo que garantiza la actuacion etica e integra de la organización.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Canal etico</div><div class="val-desc" style="margin-top:6px">Canal de denuncias confidencial para la comunicación de posibles irregularidades. Gestiónado conforme a la Ley 2/2023 de protección del informante.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">ISO 20400 · Compras sostenibles</div><div class="val-desc" style="margin-top:6px">Gestión sostenible de la cadena de suministro. Criterios de sostenibilidad en la selección de proveedores.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Organo de gobierno</div><div class="val-desc" style="margin-top:6px">Estructura de gobierno clara e independiente, integrada en el Grupo Clece (ACS). Separacion de funciones y responsabilidades.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">Transparencia y reporte</div><div class="val-desc" style="margin-top:6px">Reporte anual de indicadores ambientales, sociales y de gobierno. Evaluación externa a traves de EcoVadis Platinum.</div></div>
+        <div class="val-item" style="border:1px solid var(--line);padding:22px"><div class="val-title">RGPD y privacidad</div><div class="val-desc" style="margin-top:6px">Sistemas de gestión de datos conformes al Reglamento General de Protección de Datos. Delegado de Protección de Datos designado.</div></div>
+      </div>
+
+      <!-- DOCUMENTOS DESCARGABLES -->
+      <div style="margin-top:32px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:14px;height:1px;background:var(--muted)"></span>Documentos disponibles para descarga</div>
+        <div style="display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line)">
+          <a href="#" style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--white);color:var(--navy);text-decoration:none" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--white)'">
+            <span style="color:var(--blue2);font-size:18px;flex-shrink:0">↓</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--navy)">Código ético y conducta</div><div style="font-size:11px;color:var(--muted);margin-top:2px">CLECE Facility Services S.A.</div></div>
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--white);color:var(--navy);text-decoration:none" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--white)'">
+            <span style="color:var(--blue2);font-size:18px;flex-shrink:0">↓</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--navy)">Política de prevención de riesgos penales y antisoborno</div><div style="font-size:11px;color:var(--muted);margin-top:2px">CLECE Facility Services S.A.</div></div>
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--white);color:var(--navy);text-decoration:none" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--white)'">
+            <span style="color:var(--blue2);font-size:18px;flex-shrink:0">↓</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--navy)">Principios rectores de prevención de responsabilidad penal de Clece Facility Services</div><div style="font-size:11px;color:var(--muted);margin-top:2px">CLECE Facility Services S.A.</div></div>
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--white);color:var(--navy);text-decoration:none" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--white)'">
+            <span style="color:var(--blue2);font-size:18px;flex-shrink:0">↓</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--navy)">Política de funcionamiento del canal ético</div><div style="font-size:11px;color:var(--muted);margin-top:2px">CLECE Facility Services S.A.</div></div>
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--white);color:var(--navy);text-decoration:none" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--white)'">
+            <span style="color:var(--blue2);font-size:18px;flex-shrink:0">↓</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--navy)">Política de cumplimiento en materia de competencia</div><div style="font-size:11px;color:var(--muted);margin-top:2px">CLECE Facility Services S.A.</div></div>
+          </a>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace">Los enlaces se activarán en la implementación final.</div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: CONTACTO -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-contacto">
+  <div class="sec" style="padding-top:48px">
+    <div class="sec-inner">
+      <div class="s-lbl">Contacto</div>
+      <div class="s-title">Contacte con nuestro equipo técnico</div>
+      <p class="s-sub">Indica tu sector de actividad para que podamos orientar correctamente tu consulta hacia el equipo especializado.</p>
+      <div class="contact-grid">
+        <div>
+          <div class="form-row"><label class="form-label">Nombre y apellidos</label><input class="form-input" type="text" placeholder="Nombre completo"></div>
+          <div class="form-row"><label class="form-label">Empresa</label><input class="form-input" type="text" placeholder="Nombre de la empresa"></div>
+          <div class="form-row"><label class="form-label">Cargo</label><input class="form-input" type="text" placeholder="Cargo o puesto"></div>
+          <div class="form-row"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="correo@empresa.com"></div>
+          <div class="form-row"><label class="form-label">Teléfono</label><input class="form-input" type="tel" placeholder="+34 600 000 000"></div>
+          <div class="form-row">
+            <label class="form-label">Sector <span class="badge new" style="margin-left:6px;vertical-align:middle">NUEVO</span></label>
+            <select class="form-select"><option value="">Selecciona tu sector...</option><option>CFS Data Centers</option><option>Healthcare · Sociosanitario</option><option>Industry · Industrial</option><option>Energy · Energético</option><option>Facilities · Terciario</option><option>Sport &amp; Leisure · Deportivo</option><option>Otro sector</option></select>
+          </div>
+          <div class="form-row"><label class="form-label">Mensaje</label><textarea class="form-textarea" placeholder="Describe brevemente tu proyecto o consulta..."></textarea></div>
+          <button class="nb pri" style="width:100%;padding:12px;font-size:13px">Enviar consulta</button>
+        </div>
+        <div>
+          <div style="font-family:monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Delegaciónes</div>
+          <div class="contact-offices">
+            <div class="office" style="background:var(--surface);border-left:2px solid var(--navy)"><div class="office-name">Oficinas Centrales</div><div class="office-addr">C/ Quintanavides 19, Edif. 4, 1a pl. · 28050 Madrid<br>info@clecefs.com · 917 459 662</div></div>
+            <div class="office"><div class="office-name">Dir. Regional Centro</div><div class="office-addr">Av. Manoteras 46 bis, 2a pl. · 28050 Madrid</div></div>
+            <div class="office"><div class="office-name">Dir. Regional Noroeste</div><div class="office-addr">C/ Ducado 2 · 47009 Valladolid · (Portugal)</div></div>
+            <div class="office"><div class="office-name">Dir. Regional Nordeste</div><div class="office-addr">C/ Josep Ferrater i Mora, 2-4 · 08019 Barcelona</div></div>
+            <div class="office"><div class="office-name">Dir. Regional Levante</div><div class="office-addr">Parque Tecnológico, C/ Conde Alessandro Volta · 46980 Paterna</div></div>
+            <div class="office"><div class="office-name">Dir. Regional Sur</div><div class="office-addr">Avda. República Argentina, 21B · 41011 Sevilla</div></div>
+            <div class="office"><div class="office-name">Dir. Regional Canarias</div><div class="office-addr">Pol. Ind. Las Rubiesas, C/ Ignacio Ellacuria · 35214 Telde, Las Palmas</div></div>
+          </div>
+          <div style="margin-top:20px;padding:16px;border:1px solid var(--line);background:var(--surface)">
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);margin-bottom:6px">CONTACTO GENERAL</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.8">info@clecefs.com<br>917 459 662<br>C/ Quintanavides 19, Bloque 4<br>28050 Madrid</div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- SLIDE 5: SOPORTE END-TO-END -->
-    <div class="slide">
-      <div class="slide-inner">
-        <div class="nav-map">
-          <div class="nm-item"><div class="nm-title">Quienes somos</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Sectores</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item"><div class="nm-title">Servicios</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item active"><div class="nm-title">Soporte end-to-end</div><div class="nm-sub">nuevo</div><span class="nm-new">NEW</span></div>
-          <div class="nm-item"><div class="nm-title">Referencias</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Sostenibilidad</div><div class="nm-sub">se mantiene</div></div>
-          <div class="nm-item"><div class="nm-title">Contacto</div><div class="nm-sub">se mantiene</div></div>
-        </div>
-        <div class="s-eyebrow">Pagina 4 de 7 — argumento diferenciador · Slide 6 y 8 de MA</div>
-        <div class="s-title">Soporte tecnico end-to-end</div>
-        <p class="s-sub">CFS presta servicios en todas las etapas del ciclo de vida de las infraestructuras. Esto no existe en la web actual. Es el argumento diferenciador central de la presentacion de MA.</p>
-        <div class="g4" style="flex:1">
-          <div class="cell">
-            <div class="cell-label" style="color:var(--muted)">Fase 01</div>
-            <div class="cell-title">Diseno</div>
-            <div class="cell-sub">Asesoria tecnica previa</div>
-            <ul class="cell-list">
-              <li>Complementar criterios de diseno con orientacion a eficiencia operativa</li>
-              <li>Definir requisitos tecnicos para mantenibilidad y fiabilidad</li>
-              <li>Asesorar sobre estandares y buenas practicas</li>
-            </ul>
-          </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--muted)">Fase 02</div>
-            <div class="cell-title">Implementacion</div>
-            <div class="cell-sub">Supervision e instalacion</div>
-            <ul class="cell-list">
-              <li>Supervision verificando especificaciones</li>
-              <li>Orientacion tecnica en fases criticas</li>
-              <li>Asistencia en commissioning</li>
-            </ul>
-          </div>
-          <div class="cell" style="border-top:2px solid var(--navy)">
-            <div class="cell-label" style="color:var(--navy)">Fase 03 — core</div>
-            <div class="cell-title">Operacion y Mantenimiento</div>
-            <div class="cell-sub">24/365 — preventivo, predictivo, correctivo</div>
-            <ul class="cell-list">
-              <li>Monitorizacion continua y analisis de indicadores</li>
-              <li>Planificacion mantenimiento preventivo y correctivo</li>
-              <li>Analisis predictivo, gestion de repuestos</li>
-              <li>Auditorias de cumplimiento y reporting</li>
-              <li>Reduccion de paradas no planificadas</li>
-            </ul>
-          </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--muted)">Transversal — Slide 8 MA</div>
-            <div class="cell-title">Mejora continua</div>
-            <div class="cell-sub">Metodologia Lean</div>
-            <ul class="cell-list">
-              <li>Vision completa de la cadena de valor</li>
-              <li>Identificacion de mudas</li>
-              <li>Estandarizacion de actividades</li>
-              <li>Mejora orientada al cliente</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+<!-- ═══════════════════════════════════════════ -->
+<!-- FOOTER (siempre visible) -->
+<!-- ═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="ft-brand">CLECE FS</div>
+      <div class="ft-desc">Operación y mantenimiento para infraestructuras de alta exigencia técnica. España y Portugal. Grupo Clece — Grupo ACS.</div>
+      <div class="ft-addr">C/ Quintanavides 19, Bloque 4 · 28050 Madrid<br>info@clecefs.com · 917 459 662</div>
     </div>
-
-    <!-- SLIDE 6: PERSONAS — redistribucion -->
-    <div class="slide">
-      <div class="slide-inner">
-        <div class="s-eyebrow">Tratamiento especifico — pagina actual "Personas"</div>
-        <div class="s-title">Donde va el contenido de "Personas"</div>
-        <p class="s-sub">La pagina "Personas" de la web actual tiene tres bloques diferenciados. Cada uno encaja de forma natural en una seccion distinta de la propuesta. La pestana desaparece del menu pero ningun contenido se pierde.</p>
-
-        <div style="flex:1;display:grid;grid-template-columns:1fr 3px 1fr 3px 1fr;gap:0">
-          <div class="split-col">
-            <div class="split-col-label del">Bloque 1: El valor de las personas</div>
-            <div class="sp-item">
-              <div class="sp-item-title">Cultura y valores</div>
-              <div class="sp-item-dest">
-                <span class="arrow-badge" style="background:#D1FAE5;color:#065F46">&#8594; Quienes somos</span>
-              </div>
-              <div class="sp-item-desc">Honestidad, transparencia, integridad. Forma parte de la presentacion de la empresa ante el cliente.</div>
-            </div>
-            <div class="sp-item">
-              <div class="sp-item-title">Capacidad tecnica del equipo</div>
-              <div class="sp-item-dest">
-                <span class="arrow-badge" style="background:#D1FAE5;color:#065F46">&#8594; Quienes somos</span>
-              </div>
-              <div class="sp-item-desc">120 ingenieros, 2.330 tecnicos. Formacion continua. Lean Six Sigma. Son datos de credibilidad tecnica.</div>
-            </div>
-            <div class="sp-item">
-              <div class="sp-item-title">Cumplimiento normativo</div>
-              <div class="sp-item-dest">
-                <span class="arrow-badge" style="background:#D1FAE5;color:#065F46">&#8594; Quienes somos</span>
-              </div>
-              <div class="sp-item-desc">Sistema de Compliance. ISO 19601. Encaja en el bloque de modelo de empresa.</div>
-            </div>
-          </div>
-          <div style="background:var(--line)"></div>
-          <div class="split-col">
-            <div class="split-col-label del">Bloque 2: Prevencion de riesgos</div>
-            <div class="sp-item">
-              <div class="sp-item-title">Los 6 principios preventivos</div>
-              <div class="sp-item-dest">
-                <span class="arrow-badge" style="background:#FEF3C7;color:#92400E">&#8594; Sostenibilidad Social</span>
-              </div>
-              <div class="sp-item-desc">La politica de SST y la ISO 45001 son contenido de sostenibilidad, no de presentacion comercial. El visitante lo espera ahi.</div>
-            </div>
-            <div class="sp-item">
-              <div class="sp-item-title">Politica de SST (PDF)</div>
-              <div class="sp-item-dest">
-                <span class="arrow-badge" style="background:#FEF3C7;color:#92400E">&#8594; Sostenibilidad Social</span>
-              </div>
-              <div class="sp-item-desc">Documento descargable. Se mantiene pero reubicado junto a EFR, Plan de Igualdad e IQNet SR10.</div>
-            </div>
-            <div class="sp-item">
-              <div class="sp-item-title">Corazon y Manos (ONG)</div>
-              <div class="sp-item-dest">
-                <span class="arrow-badge" style="background:#FEF3C7;color:#92400E">&#8594; Sostenibilidad Social</span>
-              </div>
-              <div class="sp-item-desc">Asociacion sin animo de lucro del grupo. Encaja en el bloque de accion social.</div>
-            </div>
-          </div>
-          <div style="background:var(--line)"></div>
-          <div class="split-col">
-            <div class="split-col-label keep">Bloque 3: Canal de empleo</div>
-            <div class="sp-item">
-              <div class="sp-item-title">Enlace al portal de empleo</div>
-              <div class="sp-item-dest">
-                <span class="arrow-badge" style="background:#EFF6FF;color:#1E3A8A">&#8594; Menu + Footer</span>
-              </div>
-              <div class="sp-item-desc">Se mantiene exactamente como esta: enlace directo en el menu y en el footer. No necesita pagina propia.</div>
-            </div>
-            <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--line)">
-              <div style="font-family:monospace;font-size:10px;color:var(--muted);line-height:1.6">
-                Resultado: la pestana "Personas" desaparece del menu principal. Todo su contenido se reubica. El visitante que busca empleo sigue encontrando el enlace directo.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
+      <h4>Sectores</h4>
+      <a onclick="navSector('dc')">CFS Data Centers</a>
+      <a onclick="navSector('hc')">Healthcare</a>
+      <a onclick="navSector('ind')">Industry</a>
+      <a onclick="navSector('ene')">Energy</a>
+      <a onclick="navSector('fac')">Facilities</a>
+      <a onclick="navSector('spo')">Sport &amp; Leisure</a>
     </div>
-
-    <!-- SLIDE 7: SOSTENIBILIDAD + CONTACTO -->
-    <div class="slide">
-      <div class="slide-inner">
-        <div class="nav-map">
-          <div class="nm-item"><div class="nm-title">Quienes somos</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Sectores</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item"><div class="nm-title">Servicios</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item"><div class="nm-title">Soporte end-to-end</div><div class="nm-sub">nuevo</div></div>
-          <div class="nm-item"><div class="nm-title">Referencias</div><div class="nm-sub">reorganizado</div></div>
-          <div class="nm-item active"><div class="nm-title">Sostenibilidad</div><div class="nm-sub">se mantiene</div></div>
-          <div class="nm-item active" style="background:transparent"><div class="nm-title" style="color:var(--navy)">Contacto</div><div class="nm-sub">se mantiene</div></div>
-        </div>
-        <div class="s-eyebrow">Paginas 6 y 7 de 7</div>
-        <div class="s-title">Sostenibilidad y Contacto</div>
-        <p class="s-sub">Ambas se mantienen con la estructura actual. Sostenibilidad absorbe el contenido de PRL y accion social de "Personas". Contacto mejora el formulario con campo de sector.</p>
-        <div class="g2" style="flex:1">
-          <div>
-            <div class="cell" style="border-bottom:1px solid var(--line)">
-              <div class="cell-label" style="color:var(--green)">Se mantiene — Sostenibilidad</div>
-              <div class="cell-title">Tres sub-paginas existentes</div>
-              <div class="g3" style="margin-top:10px">
-                <div class="cell bg">
-                  <div class="cell-label">Ambiental</div>
-                  <ul class="cell-list">
-                    <li>ISO 14064, huella de carbono</li>
-                    <li>Plan de descarbonizacion</li>
-                    <li>Flota ecologica</li>
-                    <li>CAEs (ahorros energeticos)</li>
-                  </ul>
-                </div>
-                <div class="cell bg">
-                  <div class="cell-label">Social</div>
-                  <ul class="cell-list">
-                    <li>IQNet SR10, Pacto Mundial</li>
-                    <li>Plan de Igualdad, EFR</li>
-                    <li>PRL — 6 principios + politica SST</li>
-                    <li>Corazon y Manos (ONG)</li>
-                  </ul>
-                </div>
-                <div class="cell bg">
-                  <div class="cell-label">Buen gobierno</div>
-                  <ul class="cell-list">
-                    <li>ISO 19601 Compliance</li>
-                    <li>Organo de gobierno</li>
-                    <li>Canal etico</li>
-                    <li>ISO 20400 Compras</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="cell">
-            <div class="cell-label" style="color:var(--green)">Se mantiene con mejora — Contacto</div>
-            <div class="cell-title">Formulario mejorado</div>
-            <div class="cell-desc" style="margin-top:6px">El formulario actual no tiene campo de sector. La propuesta anade un selector para que el mensaje llegue pre-categorizado a la delegacion correcta.</div>
-            <div style="margin-top:14px;border:1px solid var(--line);padding:14px;background:var(--surface)">
-              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-family:monospace;text-transform:uppercase;letter-spacing:.08em;font-size:10px">Campos propuestos</div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="font-size:12px;color:var(--sub);display:flex;gap:8px"><span style="color:var(--muted);font-family:monospace;font-size:10px;width:120px;flex-shrink:0">Nombre</span>Campo de texto</div>
-                <div style="font-size:12px;color:var(--sub);display:flex;gap:8px"><span style="color:var(--muted);font-family:monospace;font-size:10px;width:120px;flex-shrink:0">Empresa</span>Campo de texto</div>
-                <div style="font-size:12px;color:var(--sub);display:flex;gap:8px"><span style="color:var(--muted);font-family:monospace;font-size:10px;width:120px;flex-shrink:0">Sector</span><strong style="color:var(--navy)">Selector: DC / Healthcare / Industry / Energy / Facilities / Sport / Otro</strong></div>
-                <div style="font-size:12px;color:var(--sub);display:flex;gap:8px"><span style="color:var(--muted);font-family:monospace;font-size:10px;width:120px;flex-shrink:0">Mensaje</span>Textarea</div>
-              </div>
-            </div>
-            <div style="margin-top:14px">
-              <div style="font-size:10px;color:var(--muted);font-family:monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">6 delegaciones con datos de contacto</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-                <div style="font-size:11px;color:var(--sub);padding:4px 0;border-bottom:1px solid var(--line)">Centro — Manoteras, Madrid</div>
-                <div style="font-size:11px;color:var(--sub);padding:4px 0;border-bottom:1px solid var(--line)">Noroeste — Valladolid</div>
-                <div style="font-size:11px;color:var(--sub);padding:4px 0;border-bottom:1px solid var(--line)">Nordeste — Barcelona</div>
-                <div style="font-size:11px;color:var(--sub);padding:4px 0;border-bottom:1px solid var(--line)">Sur — Sevilla</div>
-                <div style="font-size:11px;color:var(--sub);padding:4px 0;border-bottom:1px solid var(--line)">Levante — Paterna</div>
-                <div style="font-size:11px;color:var(--sub);padding:4px 0">Canarias + PLM Portugal</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
+      <h4>Servicios</h4>
+      <a onclick="nav('servicios')">O&amp;M instalaciones</a>
+      <a onclick="nav('servicios')">Eficiencia energética</a>
+      <a onclick="nav('servicios')">Ingeniería y consultoría</a>
+      <a onclick="nav('soporte')">Soporte end-to-end</a>
     </div>
-
-  </div><!-- /slides -->
-</div><!-- /deck -->
+    <div>
+      <h4>Empresa</h4>
+      <a onclick="nav('quienes')">Quiénes somos</a>
+      <a onclick="nav('referencias')">Referencias</a>
+      <a onclick="nav('sost')">Sostenibilidad</a>
+      <a href="https://www.canaldeempleo.es/CLECE" target="_blank">Canal de empleo</a>
+      <a onclick="nav('contacto')">Contacto</a>
+    </div>
+    <div class="ft-bot">
+      <span>2026 CLECE Facility Services S.A. · Grupo Clece · Grupo ACS</span>
+      <span>Aviso legal · Privacidad · Cookies</span>
+    </div>
+  </div>
+</footer>
 
 <script>
-var cur = 0;
-var total = 7;
-var slides = document.getElementById('slides');
-var prog = document.getElementById('prog');
-var counter = document.getElementById('counter');
-var prev = document.getElementById('prev');
-var next = document.getElementById('next');
-var dotsEl = document.getElementById('dots');
-
-for (var i = 0; i < total; i++) {
-  var d = document.createElement('div');
-  d.className = 'dot' + (i === 0 ? ' on' : '');
-  d.setAttribute('data-i', i);
-  d.onclick = (function(idx){ return function(){ go2(idx); }; })(i);
-  dotsEl.appendChild(d);
-}
-
-function go(dir) { go2(cur + dir); }
-
-function go2(idx) {
-  if (idx < 0 || idx >= total) return;
-  cur = idx;
-  slides.style.transform = 'translateX(-' + (cur * 100) + '%)';
-  prog.style.width = ((cur + 1) / total * 100) + '%';
-  counter.textContent = (cur + 1) + ' / ' + total;
-  prev.disabled = cur === 0;
-  next.disabled = cur === total - 1;
-  var dots = dotsEl.querySelectorAll('.dot');
-  for (var i = 0; i < dots.length; i++) {
-    dots[i].className = 'dot' + (i === cur ? ' on' : '');
+// ── SECTOR DATA ──
+var sectors = {
+  dc:{
+    color:'#0C4A6E', code:'01 / Data Centers', name:'CFS Data Centers',
+    sub:'Mantenimiento y eficiencia operacional para infraestructuras IT criticas 24/7',
+    desc:'O&M para centros de datos de cualquier escala y sector. Mantenimiento preventivo, predictivo y correctivo de sistemas críticos de energía, refrigeración, conectividad y seguridad. Disponibilidad máxima como objetivo único e irrenunciable.',
+    certs:['ENS · Cat. Media','ISO 27001','ISO 9001','ISO 50001'],
+    clientSectors:[
+      {name:'Tecnología',clients:'AWS · Arsys'},
+      {name:'Industrial',clients:'Enagas · Nissan · Renault · Bosch · Aigues de Barcelona · TV3'},
+      {name:'Administración Pública',clients:'Tragsa · INTA · Naciones Unidas · Ministerio de Industria'},
+      {name:'Finanzas',clients:'Santander · Cecabank · Banco de Espana · Imbisa'},
+      {name:'Transportes',clients:'Consorcio Transportes Madrid · Adif'},
+      {name:'Salud',clients:'SaludMadrid · Fremap · H. Puerta del Hierro · HJ23'},
+      {name:'Universidades e I+D',clients:'Por confirmar'},
+      {name:'Seguros',clients:'Mutua Madrilena · Torre de Cristal'},
+      {name:'Ocio',clients:'Caja Mágica · Palacio de la Magdalena'},
+    ],
+    services:[
+      ['Data Hall y distribucion electrica','UPS, STS, bancos de carga, grupos electrógenos, alta y baja tensión.'],
+      ['Refrigeración crítica','CRAH/CRAC, producción de frío, distribución hidráulica, free cooling.'],
+      ['Monitorización DCIM/BMS','Implantación y operación de plataformas DCIM y BMS. Análisis de indicadores en tiempo real.'],
+      ['PCI y seguridad','Extinción automática, detección, BIEs. Monitorización 24/365.'],
+      ['Logística interna','Gestion de inventario crítico, repuestos y proveedores OEM.'],
+    ],
+    refs:[
+      ['Mutua Madrilena','Torre de Cristal · Madrid','Mantenimiento integral. Facility Services Hard. sistemas de energía, refrigeración, PCI y BMS.'],
+      ['Intersion','CPD · Madrid','Facility Services integral. O&M de todos los sistemas críticos del centro de procesamiento de datos.'],
+    ]
+  },
+  hc:{
+    color:'#065F46', code:'02 / Healthcare', name:'Sector sociosanitario',
+    sub:'Hospitales · Centros médicos · Residencias · Farmacias',
+    desc:'Mantenimiento con normativa específica: gases medicinales, salas blancas, sistemas de emergencia hospitalaria. Prevención de legionelosis. Experiencia en centros con acreditación JCI.',
+    certs:['ISO 9001','ISO 45001','JCI (referencia)','ISO 14001'],
+    services:[
+      ['Gases medicinales','Mantenimiento de redes de gases medicinales. Normativa específica de instalaciones hospitalarias.'],
+      ['Salas blancas y quirófanos','Mantenimiento de climatización y filtración en quirófanos y áreas críticas.'],
+      ['sistemas de emergencia','Grupos electrógenos, UPS y sistemas SAI para continuidad asistencial.'],
+      ['Tratamiento de agua y legionela','Planes de control de legionela. Ósmosis inversa, descalcificación y monitorización.'],
+      ['Climatización hospitalaria','HVAC específico para entornos sanitarios. Control de presiones diferenciales.'],
+    ],
+    refs:[
+      ['Hospital Puerta del Hierro','Majadahonda · Madrid','Mantenimiento integral de instalaciones hospitalarias. Gases, climatización, electricidad y PCI.'],
+      ['Residencia Alzheimer Madrid','Madrid','Acreditación JCI. Facility Services integral. Alta exigencia normativa sociosanitaria.'],
+    ]
+  },
+  ind:{
+    color:'#6B3A00', code:'03 / Industry', name:'Sector industrial',
+    sub:'Automoción · Farma · Manufacturera · Agroalimentaria',
+    desc:'Mantenimiento orientado a la maximización de la disponibilidad de planta. Mantenimiento basado en la condición (CBM). Gestion de OEMs. Certificación Lean Six Sigma en gestores de CFS.',
+    certs:['ISO 9001','ISO 14001','Lean Six Sigma','ISO 45001'],
+    services:[
+      ['Mantenimiento basado en condición (CBM)','Analisis de vibraciones, termografía, analisis de aceites. Mantenimiento predictivo orientado a resultados.'],
+      ['Instalaciones termicas e hidráulicas','Mantenimiento de sistemas de producción de calor, frío, vapor y fluidos de proceso.'],
+      ['Alta y baja tensión · Salas electricas','Cuadros de distribución, transformadores, motores. Coordinación con responsables de planta.'],
+      ['Gestion de OEMs y proveedores','Coordinación con fabricantes de maquinaria específica. Gestion de contratos de mantenimiento OEM.'],
+      ['Maximizacion OEE','Indicadores de eficiencia global de equipos. Reducción de paradas no planificadas.'],
+    ],
+    refs:[
+      ['Renault','Sede y plantas · Nacional','Facility Services + multiservicio en plantas de producción. Mantenimiento eléctrico, HVAC e instalaciones.'],
+      ['Siegfried','Multi-ubicación · Nacional','Farma. Multiservicio en plantas de producción. Salas blancas, HVAC y sistemas eléctricos.'],
+    ]
+  },
+  ene:{
+    color:'#3B1F8C', code:'04 / Energy', name:'Servicios energeticos',
+    sub:'Transversal a todos los sectores · ESE acreditada',
+    desc:'Empresa de Servicios Energéticos (ESE) acreditada. Gestión de Certificados de Ahorro Energético (CAEs). Auditoría, explotación e inversión energética. UNE 216701 en tres modalidades. Plataforma propia de gestion energetica con monitorización de suministros, alarmas y analítica comparativa entre edificios.',
+    certs:['ISO 50001','UNE 216701 PSE Auditoria','UNE 216701 PSE Explotacion','UNE 216701 PSE Inversion'],
+    services:[
+      ['Plataforma de gestion energetica','Herramienta propia que integra todos los suministros (electricidad, gas, gasóleo, biomasa) y elementos de generación (solar FV, cogeneración) en una única plataforma. Carga y validacion de facturacion, alarmas energeticas, control del gasto ejecutado vs previsto y analítica comparativa entre edificios.'],
+      ['Auditorias y consultoria energetica','Identificación de oportunidades de ahorro. Informes de diagnóstico y propuestas de mejora con indicadores de eficiencia energética.'],
+      ['Solar fotovoltaica y cogeneracion','Diseno, instalación y mantenimiento de instalaciones de generacion distribuida.'],
+      ['Alumbrado público y recarga VE','Renovacion de alumbrado a tecnología LED. Instalación y mantenimiento de puntos de recarga de vehiculo electrico.'],
+      ['Certificados de Ahorro Energetico (CAEs)','Gestion completa del proceso: proyecto, ejecucion, verificacion y tramitacion de CAEs.'],
+      ['ISO 50001 · sistemas de gestion de energía','Implantacion y mantenimiento de SGE. Objetivo: reduccion del consumo y la factura energetica del cliente.'],
+    ],
+    refs:[
+      ['Enagas','Nacional','Mantenimiento integral y servicios energeticos. Auditoría, explotación e inversión. Gestión de CAEs.'],
+    ]
+  },
+  fac:{
+    color:'#1A3480', code:'05 / Facilities', name:'Sector terciario',
+    sub:'Sedes corporativas · Comercial · Oficinas · Logistica',
+    desc:'Facility Management integral (ISO 41011). Integración de personas, espacios y procesos dentro del entorno del inmueble. Cuadros de mando con SLAs y KPIs. GMAO y gestión del dato.',
+    certs:['ISO 41011','ISO 9001','ISO 14001','ISO 50001'],
+    services:[
+      ['Mantenimiento integral de instalaciones','Electricidad, climatización, PCI, fontanería. Gestión unificada con un único interlocutor.'],
+      ['Gestión del ciclo de vida de activos','Inventario técnico, planificación de inversiones y reemplazos. Maximización del retorno.'],
+      ['Business Intelligence y GMAO','Cuadros de mando operativos. SLAs y KPIs. Reporting ejecutivo y técnico.'],
+      ['Servicios auxiliares (Soft FM)','Conserjería, recepción, correo interno, coordinación de accesos.'],
+      ['Gestión energética de edificios','Monitorización y optimización del consumo. Certificación energética.'],
+    ],
+    refs:[
+      ['Banco Santander','Ciudad Financiera y edificios corporativos','Facility Services Hard. Mantenimiento integral en sede central y red de edificios.'],
+      ['Umivale Activa','Nacional','Conserjería, limpieza y mantenimiento integral en todos los centros de la mutua.'],
+      ['Cecabank · ICO · Endesa','Sedes corporativas · Madrid','Facility Services integral. Hard, soft y gestión de accesos.'],
+    ]
+  },
+  spo:{
+    color:'#0A6880', code:'06 / Sport & Leisure', name:'Sport &amp; Leisure',
+    sub:'Polideportivos · Piscinas · Instalaciones de ocio · Cultura',
+    desc:'Gestión integral de instalaciones deportivas públicas y privadas. Programación técnico-deportiva, mantenimiento de instalaciones acuáticas, eficiencia energética y gestión de accesos.',
+    certs:['ISO 9001','ISO 14001','ISO 50001','ISO 45001'],
+    services:[
+      ['Mantenimiento instalaciones acuáticas','Tratamiento y análisis de agua en piscinas. Mantenimiento de sistemas de depuración y calefacción.'],
+      ['Eficiencia energética','Auditoría y optimización del consumo. Recuperación de calor, energías renovables.'],
+      ['Gestión de accesos y recepción','Control de accesos, atención al usuario, coordinación de servicios auxiliares.'],
+      ['Programación técnico-deportiva','Gestión del uso de instalaciones. Coordinación de actividades y eventos deportivos.'],
+      ['Mantenimiento de instalaciones escénicas','Rigging, equipos de iluminación y sonido, instalaciones eléctricas especiales.'],
+    ],
+    refs:[
+      ['Madrid Destino','Caja Mágica y Matadero · Madrid','Facility Services integral. Mantenimiento de instalaciones deportivas y culturales de referencia.'],
+      ['Teatro Campos Eliseos','Bilbao','Gestión integral con programación técnico-cultural. Instalaciones escénicas, electricidad y climatización.'],
+    ]
   }
+};
+
+// ── NAVIGATION ──
+var currentPage = 'home';
+function nav(page) {
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  var el = document.getElementById('page-'+page);
+  if(el){ el.classList.add('active'); }
+  document.querySelectorAll('.nl').forEach(function(n){n.classList.remove('on')});
+  var navMap = {home:'',quienes:'nav-quienes',sectores:'nav-sectores',servicios:'nav-servicios',soporte:'nav-soporte',referencias:'nav-referencias',sost:'nav-sost',contacto:'nav-contacto'};
+  if(navMap[page]){ var ne = document.getElementById(navMap[page]); if(ne) ne.classList.add('on'); }
+  window.scrollTo(0,0);
+  currentPage = page;
 }
 
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
-});
+function navSector(code) {
+  var d = sectors[code];
+  if(!d) return;
+  // hero
+  document.getElementById('sh-code').textContent = d.code;
+  document.getElementById('sh-label').textContent = d.code;
+  document.getElementById('sh-label').style.color = d.color;
+  document.getElementById('sh-name').innerHTML = d.name;
+  document.getElementById('sh-sub').textContent = d.sub;
+  document.getElementById('sh-desc').textContent = d.desc;
+  document.getElementById('sector-hero-area').style.borderBottom = '3px solid '+d.color;
+  // certs
+  var certsEl = document.getElementById('sh-certs');
+  certsEl.innerHTML = d.certs.map(function(c){ return '<span class="cert">'+c+'</span>'; }).join('');
+  // body
+  var body = '';
+  body += '<div class="sec"><div class="sec-inner">';
+  body += '<div class="s-lbl">Servicios</div><div class="s-title">Portfolio técnico</div>';
+  body += '<div class="g3" style="margin-top:24px">';
+  d.services.forEach(function(s,i){
+    body += '<div class="pt"><div class="pt-top" style="background:'+d.color+'"></div>';
+    body += '<div class="pt-title">'+s[0]+'</div>';
+    body += '<div class="pt-sub" style="color:'+d.color+'">Servicio '+(i+1).toString().padStart(2,'0')+'</div>';
+    body += '<div style="font-size:12px;color:var(--sub);line-height:1.6;margin-top:6px">'+s[1]+'</div></div>';
+  });
+  body += '</div></div></div>';
+  // refs
+  body += '<div class="sec bg"><div class="sec-inner">';
+  body += '<div class="s-lbl">Clientes</div><div class="s-title">Referencias en este sector</div>';
+  body += '<div style="display:grid;grid-template-columns:repeat('+Math.min(d.refs.length,3)+',1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:24px">';
+  d.refs.forEach(function(r){
+    body += '<div class="rf">';
+    body += '<div class="rf-name">'+r[0]+'</div>';
+    body += '<div class="rf-location" style="font-family:monospace;font-size:10px;color:var(--muted);margin-bottom:5px">'+r[1]+'</div>';
+    body += '<div class="rf-desc">'+r[2]+'</div></div>';
+  });
+  body += '</div>';
+  // bloque clientes por sector (solo DC)
+  if(d.clientSectors){
+    body += '<div class="s-lbl" style="margin-top:32px">Clientes por sector de actividad</div>';
+    body += '<div class="s-title">9 sectores. Un mismo nivel de exigencia.</div>';
+    body += '<p style="font-size:13px;color:var(--sub);max-width:640px;line-height:1.75;margin-bottom:20px;font-weight:300">CFS Data Centers opera infraestructuras IT criticas para clientes de los sectores mas exigentes. La diversidad de sectores atendidos es el reflejo de la amplitud tecnica del servicio.</p>';
+    body += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)">';
+    d.clientSectors.forEach(function(s){
+      body += '<div style="background:var(--white);padding:16px 18px"><div style="font-family:monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dc);margin-bottom:5px">'+s.name+'</div><div style="font-size:12px;color:var(--sub);line-height:1.6">'+s.clients+'</div></div>';
+    });
+    body += '</div>';
+  }
+  body += '</div></div>';
+  // certs full
+  body += '<div class="sec"><div class="sec-inner">';
+  body += '<div class="s-lbl">Acreditaciones relevantes para este sector</div>';
+  body += '<div class="certs" style="margin-top:12px">';
+  d.certs.forEach(function(c){ body += '<span class="cert">'+c+'</span>'; });
+  body += '</div>';
+  body += '<div style="margin-top:20px"><button class="nb pri" onclick="nav(\'contacto\')">Solicitar información sobre este sector</button></div>';
+  body += '</div></div>';
+  document.getElementById('sector-body').innerHTML = body;
+  nav('sector-detail');
+}
+
+function navSost(tab) {
+  nav('sost');
+  switchSost(tab, null);
+}
+function switchSost(tab, el) {
+  document.querySelectorAll('.sost-page').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('sost-'+tab).classList.add('active');
+  document.querySelectorAll('.st').forEach(function(t){t.classList.remove('on')});
+  if(el){ el.classList.add('on'); }
+  else { document.querySelectorAll('.st').forEach(function(t){ if(t.textContent.toLowerCase().includes(tab.substring(0,4))) t.classList.add('on'); }); }
+}
+
+function filterRefs(btn, sector) {
+  document.querySelectorAll('.rf-btn').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  document.querySelectorAll('.ref-card').forEach(function(c){
+    c.style.display = (sector==='all' || c.dataset.sector===sector) ? 'block' : 'none';
+  });
+}
 </script>
 </body>
 </html>
