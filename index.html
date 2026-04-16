@@ -345,14 +345,13 @@ footer a:hover{color:#fff}
       <div class="s-title">Servicios especializados por sector</div>
       <p class="s-sub">CLECE FS organiza su actividad en función de las exigencias técnicas, normativas y operativas de cada sector. Cada clasificación agrupa el portfolio de servicios, habilitaciones y referencias relevantes para ese tipo de infraestructura.</p>
       <div class="g3">
-        <div class="sc dc" onclick="navSector('dc')">
-          <div class="sc-badge">Marca propia registrada</div>
-          <div class="sc-code">01 / Data Centers</div>
-          <div class="sc-name">CFS Data Centers</div>
-          <div class="sc-sect">Infraestructura IT crítica</div>
+        <div class="sc" onclick="navSector('dc')">
+          <div class="sc-code" style="color:var(--dc)">01 / Data Centers</div>
+          <div class="sc-name">CFS Data Centers®</div>
+          <div class="sc-sect" style="color:var(--muted)">Infraestructura IT crítica</div>
           <div class="sc-desc">O&amp;M para centros de datos. Disponibilidad 24/365. Mantenimiento preventivo, predictivo y correctivo de sistemas críticos de energía, refrigeración y conectividad.</div>
           <div class="sc-items"><div class="sci">Data Hall · UPS · Grupos electrógenos · STS</div><div class="sci">Refrigeración CRAH/CRAC · HVAC</div><div class="sci">Monitorización DCIM · BMS</div><div class="sci">PCI · Seguridad · Logística interna</div></div>
-          <div class="sc-link">Ver sector Data Centers →</div>
+          <div class="sc-link" style="color:var(--dc)">Ver sector Data Centers →</div>
         </div>
         <div class="sc" onclick="navSector('hc')">
           <div class="sc-code" style="color:var(--hc)">02 / Healthcare</div>
@@ -649,7 +648,7 @@ footer a:hover{color:#fff}
       <div class="s-title">Servicios especializados por sector</div>
       <p class="s-sub">CLECE FS organiza su actividad en función de las exigencias técnicas, normativas y operativas de cada sector. Selecciona un sector para ver los servicios específicos, habilitaciones y referencias.</p>
       <div class="g3">
-        <div class="sc dc" onclick="navSector('dc')"><div class="sc-badge">Marca propia registrada</div><div class="sc-code">01 / Data Centers</div><div class="sc-name">CFS Data Centers</div><div class="sc-sect">Infraestructura IT crítica</div><div class="sc-desc">O&amp;M para centros de datos. Disponibilidad 24/365.</div><div class="sc-link">Ver sector →</div></div>
+        <div class="sc" onclick="navSector('dc')"><div class="sc-code" style="color:var(--dc)">01 / Data Centers</div><div class="sc-name">CFS Data Centers®</div><div class="sc-sect" style="color:var(--muted)">Infraestructura IT crítica</div><div class="sc-desc">O&amp;M para centros de datos. Disponibilidad 24/365.</div><div class="sc-link" style="color:var(--dc)">Ver sector →</div></div>
         <div class="sc" onclick="navSector('hc')"><div class="sc-code" style="color:var(--hc)">02 / Healthcare</div><div class="sc-name">Sector sociosanitario</div><div class="sc-sect">Hospitales · Centros médicos · Residencias</div><div class="sc-desc">Normativa específica: gases medicinales, salas blancas, JCI.</div><div class="sc-link" style="color:var(--hc)">Ver sector →</div></div>
         <div class="sc" onclick="navSector('ind')"><div class="sc-code" style="color:var(--ind)">03 / Industry</div><div class="sc-name">Sector industrial</div><div class="sc-sect">Automoción · Farma · Manufacturera</div><div class="sc-desc">Maximización de la disponibilidad de planta. CBM. Lean Six Sigma.</div><div class="sc-link" style="color:var(--ind)">Ver sector →</div></div>
         <div class="sc" onclick="navSector('ene')"><div class="sc-code" style="color:var(--ene)">04 / Energy</div><div class="sc-name">Servicios energéticos</div><div class="sc-sect">Transversal a todos los sectores</div><div class="sc-desc">ESE acreditada. CAEs. ISO 50001. UNE 216701 en tres modalidades.</div><div class="sc-link" style="color:var(--ene)">Ver sector →</div></div>
@@ -1054,7 +1053,7 @@ footer a:hover{color:#fff}
 // ── SECTOR DATA ──
 var sectors = {
   dc:{
-    color:'#0C4A6E', code:'01 / Data Centers', name:'CFS Data Centers',
+    color:'#0C4A6E', code:'01 / Data Centers', name:'CFS Data Centers®',
     sub:'Mantenimiento y eficiencia operacional para infraestructuras IT criticas 24/7',
     desc:'O&M para centros de datos de cualquier escala y sector. Mantenimiento preventivo, predictivo y correctivo de sistemas críticos de energía, refrigeración, conectividad y seguridad. Disponibilidad máxima como objetivo único e irrenunciable.',
     certs:['ENS · Cat. Media','ISO 27001','ISO 9001','ISO 50001'],
